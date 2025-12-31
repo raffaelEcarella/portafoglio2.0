@@ -1,4 +1,6 @@
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -7,13 +9,18 @@ body {
   color: #1f2937;
 }
 
-.dark {
-  background: #121212;
-  color: #f2f4f8;
+/* SCHERMI */
+.screen {
+  display: none;
+  min-height: 100vh;
 }
 
+.screen.active {
+  display: block;
+}
+
+/* LOGIN */
 #login {
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,21 +36,16 @@ body {
   border: 1px solid #ccc;
 }
 
-button {
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
+/* APP */
 header {
   padding: 15px;
   background: #2563eb;
   color: white;
   text-align: center;
+}
+
+main {
+  padding-bottom: 70px;
 }
 
 .card {
@@ -53,33 +55,41 @@ header {
   border-radius: 12px;
 }
 
-.dark .card {
-  background: #1f1f1f;
-}
-
-.saldo {
-  font-size: 2.5em;
-  font-weight: bold;
-}
-
 nav {
   position: fixed;
   bottom: 0;
   width: 100%;
   display: flex;
-  background: #eee;
+  background: #e5e7eb;
 }
 
 nav button {
   flex: 1;
-  border-radius: 0;
+  padding: 15px;
+  border: none;
+  background: transparent;
+  font-weight: 600;
 }
 
+/* PAGINE */
 .page {
   display: none;
-  padding-bottom: 70px;
 }
 
 .page.active {
   display: block;
+}
+
+/* DARK MODE */
+body.dark {
+  background: #121212;
+  color: #f2f4f8;
+}
+
+body.dark header {
+  background: #1e40af;
+}
+
+body.dark .card {
+  background: #1f1f1f;
 }
