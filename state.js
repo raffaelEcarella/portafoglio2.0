@@ -1,14 +1,12 @@
 const appState = {
-  meta: {
-    version: "1.0.0"
-  },
   security: {
     pin: null,
-    attempts: 0
+    attempts: 0,
+    authenticated: false
   },
   ui: {
-    darkMode: false,
-    currentPage: "home"
+    currentPage: "home",
+    darkMode: false
   },
   finance: {
     movimenti: []
