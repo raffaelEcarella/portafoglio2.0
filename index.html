@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cassa 2026 Pro</title>
-<link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cassa 2026 Pro</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="login">
+<div id="login" class="screen active">
   <h1>Cassa 2026 Pro</h1>
   <input id="pinInput" type="password" placeholder="Inserisci PIN">
   <button id="loginBtn">Accedi</button>
@@ -19,7 +20,7 @@
 </div>
 
 <!-- APP -->
-<div id="app" hidden>
+<div id="app" class="screen">
   <header>
     <h2 id="headerTitle">Home</h2>
   </header>
@@ -28,14 +29,14 @@
     <section id="home" class="page active">
       <div class="card">
         <h3>Saldo</h3>
-        <div id="saldo" class="saldo">€0</div>
+        <div id="saldo">€0</div>
       </div>
     </section>
 
     <section id="movimenti" class="page">
       <div class="card">
         <h3>Movimenti</h3>
-        <p>STEP 2</p>
+        <p>Step successivo</p>
       </div>
     </section>
 
