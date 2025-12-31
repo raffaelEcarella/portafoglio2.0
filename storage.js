@@ -4,7 +4,10 @@ function saveState() {
 
 function loadState() {
   const data = localStorage.getItem("cassa2026");
-  if (data) Object.assign(appState, JSON.parse(data));
+  if (data) {
+    const parsed = JSON.parse(data);
+    Object.assign(appState, parsed);
+  }
 }
 
 function resetAll() {
