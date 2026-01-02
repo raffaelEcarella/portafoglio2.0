@@ -1,12 +1,10 @@
-window.appState = {
-  ui: {
-    currentPage: "home",
-    darkMode: false
-  },
+const appState = {
   finance: {
     saldo: 0,
-    obiettivo: 0,
-    movimenti: [],
-    ricorrenti: []
+    movimenti: [], // {descrizione, importo, tipo, categoria, data, ricorrenza}
+    ricorrenti: [] // movimenti ricorrenti estesi
+  },
+  ui: {
+    darkMode: false
   }
 };
