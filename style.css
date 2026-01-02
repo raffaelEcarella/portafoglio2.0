@@ -25,15 +25,54 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
-#login input {
+.pin-wrapper {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.pin-wrapper input {
+  flex: 1;
   padding: 12px;
   font-size: 1.2em;
-  text-align: center;
-  margin-bottom: 10px;
-  border-radius: 8px;
+  border-radius: 8px 0 0 8px;
   border: 1px solid #ccc;
+}
+
+.pin-wrapper button {
+  padding: 12px;
+  font-size: 1.2em;
+  border: 1px solid #ccc;
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+  background: #e5e7eb;
+  cursor: pointer;
+}
+
+/* MESSAGGI */
+.msg {
+  margin-top: 10px;
+  color: red;
+  font-weight: bold;
+}
+
+/* BOTTONI */
+.primary-btn {
+  margin: 5px 0;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.danger-btn {
+  background: #dc2626;
+  color: white;
 }
 
 /* APP */
@@ -53,6 +92,7 @@ main {
   padding: 20px;
   background: white;
   border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 nav {
@@ -61,6 +101,7 @@ nav {
   width: 100%;
   display: flex;
   background: #e5e7eb;
+  border-top: 1px solid #ccc;
 }
 
 nav button {
@@ -69,6 +110,7 @@ nav button {
   border: none;
   background: transparent;
   font-weight: 600;
+  cursor: pointer;
 }
 
 /* PAGINE */
@@ -92,4 +134,19 @@ body.dark header {
 
 body.dark .card {
   background: #1f1f1f;
+}
+
+body.dark .primary-btn {
+  background: #2563eb;
+}
+
+body.dark .danger-btn {
+  background: #dc2626;
+}
+
+/* RESPONSIVE */
+@media (max-width: 500px) {
+  nav button {
+    font-size: 0.9em;
+  }
 }
