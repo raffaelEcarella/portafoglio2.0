@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Cassa 2026 Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h2 id="headerTitle">Home</h2>
+  <button id="logoutBtn">Logout</button>
+</header>
+
+<main>
+  <section id="home" class="page active">
+    <h3>Home</h3>
+    <p>Benvenuto</p>
+  </section>
+
+  <section id="impostazioni" class="page">
+    <button id="changePinBtn">Cambia PIN</button>
+    <button id="darkToggle">Dark mode</button>
+  </section>
+</main>
+
+<nav>
+  <button data-page="home">Home</button>
+  <button data-page="impostazioni">Impostazioni</button>
+</nav>
+
+<script src="state.js"></script>
+<script src="storage.js"></script>
+<script src="ui.js"></script>
+<script src="app.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+</script>
+
+</body>
+</html>
