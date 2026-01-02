@@ -8,17 +8,9 @@
 <body>
 
 <script>
-  const data = localStorage.getItem("cassa2026");
-  if (data) {
-    const state = JSON.parse(data);
-    if (state.security?.authenticated) {
-      location.href = "app.html";
-    } else {
-      location.href = "login.html";
-    }
-  } else {
-    location.href = "login.html";
-  }
+  // ENTRY POINT SICURO
+  // La gestione accesso è tutta nella login
+  location.replace("login.html");
 </script>
 
 </body>
