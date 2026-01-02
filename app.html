@@ -15,89 +15,103 @@
   <button id="darkToggle">🌙</button>
 </header>
 
-<!-- MENU PRINCIPALE -->
-<section id="menu" class="page active">
-  <div class="card">
-    <h2>Menu</h2>
-    <button data-page="saldo">Saldo</button>
-    <button data-page="movimenti">Movimenti</button>
-    <button data-page="grafici">Grafici</button>
-    <button data-page="calendario">Calendario</button>
-    <button data-page="impostazioni">Impostazioni</button>
-  </div>
-</section>
+<main class="main-container">
 
-<!-- SALDO -->
-<section id="saldo" class="page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card">
-    <h3>Saldo attuale</h3>
-    <div id="saldoVal">€0</div>
-    <button id="addMovimentoBtn">Aggiungi Movimento</button>
-  </div>
-</section>
+  <!-- MENU PRINCIPALE -->
+  <section id="menu" class="page active center-page">
+    <div class="card center-card">
+      <h2>Menu</h2>
+      <button data-page="saldo">Saldo</button>
+      <button data-page="movimenti">Movimenti</button>
+      <button data-page="grafici">Grafici</button>
+      <button data-page="calendario">Calendario</button>
+      <button data-page="impostazioni">Impostazioni</button>
+    </div>
+  </section>
 
-<!-- MOVIMENTI -->
-<section id="movimenti" class="page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card">
-    <h3>Filtri Movimenti</h3>
-    <label>Categoria:</label>
-    <input type="text" id="filterCategoria">
-    <label>Da:</label>
-    <input type="date" id="filterDa">
-    <label>A:</label>
-    <input type="date" id="filterA">
-    <button id="applyFiltersBtn">Applica Filtri</button>
-    <button id="clearFiltersBtn">Pulisci Filtri</button>
-  </div>
-  <div class="card">
-    <h3>Lista Movimenti</h3>
-    <ul id="movimentiList"></ul>
-  </div>
-</section>
+  <!-- SALDO -->
+  <section id="saldo" class="page center-page">
+    <button class="homeBtn">🏠 Home</button>
+    <div class="card center-card">
+      <h3>Saldo attuale</h3>
+      <div id="saldoVal">€0</div>
+      <button id="addMovimentoBtn">Aggiungi Movimento</button>
+    </div>
+  </section>
 
-<!-- GRAFICI -->
-<section id="grafici" class="page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card">
-    <h3>Grafico Categorie</h3>
-    <canvas id="graficoCategorie"></canvas>
-  </div>
-  <div class="card">
-    <h3>Saldo Ultimi 30 Giorni</h3>
-    <canvas id="graficoSaldo"></canvas>
-  </div>
-  <div class="card">
-    <h3>Previsioni 15 Giorni</h3>
-    <ul id="previsioniList"></ul>
-  </div>
-</section>
+  <!-- MOVIMENTI -->
+  <section id="movimenti" class="page center-page">
+    <button class="homeBtn">🏠 Home</button>
+    <div class="card center-card">
+      <h3>Filtri Movimenti</h3>
+      <label>Categoria:</label>
+      <input type="text" id="filterCategoria">
+      <label>Da:</label>
+      <input type="date" id="filterDa">
+      <label>A:</label>
+      <input type="date" id="filterA">
+      <div class="btn-row">
+        <button id="applyFiltersBtn">Applica Filtri</button>
+        <button id="clearFiltersBtn">Pulisci Filtri</button>
+      </div>
+    </div>
+    <div class="card center-card">
+      <h3>Lista Movimenti</h3>
+      <ul id="movimentiList"></ul>
+    </div>
+  </section>
 
-<!-- CALENDARIO -->
-<section id="calendario" class="page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card">
-    <h3>Calendario Movimenti</h3>
-    <table id="calendarioTable">
-      <thead><tr><th>Data</th><th>Entrate</th><th>Spese</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</section>
+  <!-- GRAFICI -->
+  <section id="grafici" class="page center-page">
+    <button class="homeBtn">🏠 Home</button>
+    <div class="card center-card">
+      <h3>Grafico Categorie</h3>
+      <canvas id="graficoCategorie"></canvas>
+    </div>
+    <div class="card center-card">
+      <h3>Saldo Ultimi 30 Giorni</h3>
+      <canvas id="graficoSaldo"></canvas>
+    </div>
+    <div class="card center-card">
+      <h3>Previsioni 15 Giorni</h3>
+      <ul id="previsioniList"></ul>
+    </div>
+  </section>
 
-<!-- IMPOSTAZIONI -->
-<section id="impostazioni" class="page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card">
-    <h3>Impostazioni</h3>
-    <button id="darkToggle2">🌙 Dark Mode</button>
-  </div>
-</section>
+  <!-- CALENDARIO -->
+  <section id="calendario" class="page center-page">
+    <button class="homeBtn">🏠 Home</button>
+    <div class="card center-card">
+      <h3>Calendario Movimenti</h3>
+      <table id="calendarioTable">
+        <thead><tr><th>Data</th><th>Entrate</th><th>Spese</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- IMPOSTAZIONI -->
+  <section id="impostazioni" class="page center-page">
+    <button class="homeBtn">🏠 Home</button>
+    <div class="card center-card">
+      <h3>Impostazioni</h3>
+      <button id="darkToggle2">🌙 Dark Mode</button>
+      <label>Colore Entrate:</label>
+      <input type="color" id="colorEntrate" value="#28a745">
+      <label>Colore Spese:</label>
+      <input type="color" id="colorSpese" value="#dc3545">
+      <label>Colore Traguardo:</label>
+      <input type="color" id="colorTraguardo" value="#ffc107">
+      <label>Colore Saldo:</label>
+      <input type="color" id="colorSaldo" value="#007bff">
+    </div>
+  </section>
+
+</main>
 
 <!-- MODAL AGGIUNGI/MODIFICA -->
 <div id="movimentoModal" class="modal">
-  <div class="modal-content">
+  <div class="modal-content center-card">
     <h2 id="modalTitle">Aggiungi Movimento</h2>
     <label>Descrizione</label>
     <input type="text" id="movDescrizione">
