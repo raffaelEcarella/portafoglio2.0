@@ -4,13 +4,18 @@ function saveState() {
 
 function loadState() {
   const data = localStorage.getItem("cassa2026");
-  if (data) {
-    const parsed = JSON.parse(data);
-    Object.assign(appState, parsed);
-  }
+  if (data) Object.assign(appState, JSON.parse(data));
 }
 
 function resetAll() {
-  localStorage.clear();
-  location.reload();
+  localStorage.removeItem("cassa2026");
+
+  appState.security = { pin: null, attempts: 0, authenticated: false };
+  appState.ui = { currentPage: "home", darkMode: false };
+  appState.finance.movimenti = [];
+
+  document.body.classList.remove("dark");
+  showPage("home");
+  showLogin();
+  saveState();
 }
