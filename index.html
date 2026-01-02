@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cassa 2026 Pro</title>
-
   <link rel="manifest" href="manifest.json">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -14,9 +13,12 @@
 <!-- LOGIN -->
 <div id="login" class="screen active">
   <h1>Cassa 2026 Pro</h1>
-  <input id="pinInput" type="password" placeholder="Inserisci PIN">
-  <button id="loginBtn">Accedi</button>
-  <p id="loginMsg"></p>
+  <div class="pin-wrapper">
+    <input id="pinInput" type="password" placeholder="Inserisci PIN">
+    <button id="togglePin" title="Mostra/Nascondi PIN">👁️</button>
+  </div>
+  <button id="loginBtn" class="primary-btn">Accedi</button>
+  <p id="loginMsg" class="msg"></p>
 </div>
 
 <!-- APP -->
@@ -36,15 +38,16 @@
     <section id="movimenti" class="page">
       <div class="card">
         <h3>Movimenti</h3>
-        <p>Step successivo</p>
+        <ul id="movimentiList"></ul>
       </div>
     </section>
 
     <section id="impostazioni" class="page">
       <div class="card">
         <h3>Impostazioni</h3>
-        <button id="darkToggle">🌙 Dark mode</button>
-        <button id="resetBtn">Reset (AUTOOF)</button>
+        <button id="darkToggle" class="primary-btn">🌙 Dark mode</button>
+        <button id="resetBtn" class="danger-btn">Reset (AUTOOF)</button>
+        <button id="changePinBtn" class="primary-btn">Cambia PIN</button>
       </div>
     </section>
   </main>
@@ -60,5 +63,10 @@
 <script src="storage.js"></script>
 <script src="ui.js"></script>
 <script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
 </body>
 </html>
