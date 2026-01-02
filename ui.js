@@ -1,4 +1,4 @@
-// Navigazione
+// navigazione
 document.querySelectorAll("[data-page]").forEach(btn=>{
   btn.onclick=()=>showPage(btn.dataset.page);
 });
@@ -10,47 +10,20 @@ function showPage(page){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   const s=document.getElementById(page);
   if(s) s.classList.add("active");
+  if(page==="grafici") renderGrafici();
 }
 
-// Filtri Movimenti
-document.getElementById("applyFiltersBtn").onclick = renderMovimenti;
-document.getElementById("clearFiltersBtn").onclick = ()=>{
-  document.getElementById("filterCategoria").value="";
-  document.getElementById("filterDa").value="";
-  document.getElementById("filterA").value="";
-  renderMovimenti();
-};
-
-function applyFilters(movs){
-  let cat = document.getElementById("filterCategoria").value.trim().toLowerCase();
-  let da = document.getElementById("filterDa").value;
-  let a = document.getElementById("filterA").value;
-
-  return movs.filter(m=>{
-    let ok = true;
-    if(cat && m.categoria.toLowerCase().indexOf(cat)===-1) ok=false;
-    if(da && m.data<da) ok=false;
-    if(a && m.data>a) ok=false;
-    return ok;
-  });
+// gestione dark mode
+document.getElementById("darkToggle").onclick = toggleDarkMode;
+document.getElementById("darkToggle2").onclick = toggleDarkMode;
+function toggleDarkMode(){
+  document.body.classList.toggle("dark");
+  appState.ui.darkMode = document.body.classList.contains("dark");
+  saveState();
 }
 
-// Calendario
-function renderCalendario(){
-  const tbody=document.querySelector("#calendarioTable tbody");
-  tbody.innerHTML="";
-  const movs=appState.finance.movimenti;
-  const mapData={};
-  movs.forEach(m=>{
-    if(!mapData[m.data]) mapData[m.data]={entrate:0,spese:0};
-    if(m.tipo==="entrata") mapData[m.data].entrate+=m.importo;
-    else mapData[m.data].spese+=m.importo;
-  });
-  Object.keys(mapData).sort().forEach(d=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${d}</td><td>€${mapData[d].entrate.toFixed(2)}</td><td>€${mapData[d].spese.toFixed(2)}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-// Grafici e previsioni (vedi codice app.js precedente)
+// gestione colori grafici
+document.getElementById("colorEntrate").onchange = e=>{appState.ui.chartColors.entrate=e.target.value; saveState(); renderGrafici();}
+document.getElementById("colorSpese").onchange = e=>{appState.ui.chartColors.spese=e.target.value; saveState(); renderGrafici();}
+document.getElementById("colorTraguardo").onchange = e=>{appState.ui.chartColors.traguardo=e.target.value; saveState(); renderGrafici();}
+document.getElementById("colorSaldo").onchange = e=>{appState.ui.chartColors.saldo=e.target.value; saveState(); renderGrafici();}
