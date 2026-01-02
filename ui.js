@@ -1,23 +1,19 @@
 function showPage(page) {
-  document.querySelectorAll(".page").forEach(p =>
-    p.classList.remove("active")
-  );
-  const section = document.getElementById(page);
-  if (section) section.classList.add("active");
-
-  const header = document.getElementById("headerTitle");
-  if (header) header.textContent = page.charAt(0).toUpperCase() + page.slice(1);
-
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
   appState.ui.currentPage = page;
   saveState();
 }
 
-function showLogin() {
-  document.getElementById("login").classList.add("active");
-  document.getElementById("app").classList.remove("active");
-}
+document.querySelectorAll("nav button").forEach(btn => {
+  btn.onclick = () => showPage(btn.dataset.page);
+});
 
-function showApp() {
-  document.getElementById("login").classList.remove("active");
-  document.getElementById("app").classList.add("active");
-}
+document.getElementById("darkToggle").onclick = () => {
+  document.body.classList.toggle("dark");
+  appState.ui.darkMode = document.body.classList.contains("dark");
+  saveState();
+};
+
+loadState();
+showPage(appState.ui.currentPage);
