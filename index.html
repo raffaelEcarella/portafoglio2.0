@@ -2,86 +2,22 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cassa 2026 Pro</title>
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-
-  <!-- FONT -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- STILI -->
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<!-- ================= LOGIN ================= -->
-<div id="login" class="screen active">
-  <h1>Cassa 2026 Pro</h1>
-
-  <div class="pin-wrapper">
-    <input
-      id="pinInput"
-      type="password"
-      placeholder="Inserisci PIN"
-      autocomplete="off"
-    >
-    <button id="togglePin" type="button">👁️</button>
-  </div>
-
-  <button id="loginBtn">Accedi</button>
-  <p id="loginMsg"></p>
-</div>
-
-<!-- ================= APP ================= -->
-<div id="app" class="screen">
-  <header>
-    <h2 id="headerTitle">Home</h2>
-  </header>
-
-  <main>
-    <section id="home" class="page active">
-      <div class="card">
-        <h3>Saldo</h3>
-        <div id="saldo">€0</div>
-      </div>
-    </section>
-
-    <section id="movimenti" class="page">
-      <div class="card">
-        <h3>Movimenti</h3>
-        <p>Step successivo</p>
-      </div>
-    </section>
-
-    <section id="impostazioni" class="page">
-      <div class="card">
-        <h3>Impostazioni</h3>
-        <button id="darkToggle">🌙 Dark mode</button>
-        <button id="changePinBtn">Cambia PIN</button>
-        <button id="resetBtn">Reset (AUTOOF)</button>
-      </div>
-    </section>
-  </main>
-
-  <nav>
-    <button data-page="home">Home</button>
-    <button data-page="movimenti">Movimenti</button>
-    <button data-page="impostazioni">Impostazioni</button>
-  </nav>
-</div>
-
-<!-- ================= SCRIPT (ORDINE OBBLIGATORIO) ================= -->
-<script src="state.js"></script>
-<script src="storage.js"></script>
-<script src="ui.js"></script>
-<script src="app.js"></script>
-
-<!-- SERVICE WORKER -->
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+  const data = localStorage.getItem("cassa2026");
+  if (data) {
+    const state = JSON.parse(data);
+    if (state.security?.authenticated) {
+      location.href = "app.html";
+    } else {
+      location.href = "login.html";
+    }
+  } else {
+    location.href = "login.html";
   }
 </script>
 
