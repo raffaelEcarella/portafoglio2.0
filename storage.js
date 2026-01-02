@@ -8,14 +8,18 @@ function loadState() {
 }
 
 function resetAll() {
+  // Rimuove dal localStorage
   localStorage.removeItem("cassa2026");
 
+  // Reset stato in memoria
   appState.security = { pin: null, attempts: 0, authenticated: false };
   appState.ui = { currentPage: "home", darkMode: false };
-  appState.finance.movimenti = [];
+  appState.finance = { movimenti: [] };
 
+  // Reset UI
   document.body.classList.remove("dark");
-  showPage("home");
   showLogin();
+  showPage("home");
+
   saveState();
 }
