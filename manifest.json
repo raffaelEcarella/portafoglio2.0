@@ -1,0 +1,8 @@
+{
+  "name": "Cassa 2026 Pro",
+  "short_name": "Cassa",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f2f4f8",
+  "theme_color": "#2563eb"
+}

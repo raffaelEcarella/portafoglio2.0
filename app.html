@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Cassa 2026 Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1 id="headerTitle">Home</h1>
+  <button id="darkToggle">🌙</button>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section id="home" class="page active">
+    <div class="card">
+      <h2>Saldo Totale</h2>
+      <div id="saldo">€0</div>
+      <h3>Obiettivo Guadagno: <span id="obiettivo">€0</span></h3>
+      <input id="setGoal" type="number" placeholder="Imposta obiettivo">
+      <button id="saveGoal">Salva Obiettivo</button>
+    </div>
+  </section>
+
+  <!-- MOVIMENTI -->
+  <section id="movimenti" class="page">
+    <div class="card">
+      <h2>Movimenti</h2>
+      <ul id="movimentiList"></ul>
+      <button id="addMovimentoBtn">Aggiungi Movimento</button>
+    </div>
+  </section>
+
+  <!-- GRAFICI -->
+  <section id="grafici" class="page">
+    <div class="card">
+      <h2>Grafico Percentuali per Categoria</h2>
+      <canvas id="graficoCategorie"></canvas>
+      <h2>Andamento Saldo</h2>
+      <canvas id="graficoSaldo"></canvas>
+    </div>
+  </section>
+
+  <!-- STATISTICHE -->
+  <section id="statistiche" class="page">
+    <div class="card">
+      <h2>Previsioni 15 Giorni</h2>
+      <canvas id="graficoPrevisioni"></canvas>
+    </div>
+  </section>
+
+  <!-- IMPOSTAZIONI -->
+  <section id="impostazioni" class="page">
+    <div class="card">
+      <h2>Impostazioni</h2>
+      <button id="resetBtn">Reset Totale</button>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button data-page="home">Home</button>
+  <button data-page="movimenti">Movimenti</button>
+  <button data-page="grafici">Grafici</button>
+  <button data-page="statistiche">Statistiche</button>
+  <button data-page="impostazioni">Impostazioni</button>
+</nav>
+
+<script src="state.js"></script>
+<script src="storage.js"></script>
+<script src="ui.js"></script>
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</body>
+</html>
