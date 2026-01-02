@@ -1,14 +1,11 @@
-const appState = {
+window.appState = {
   security: {
     pin: null,
-    attempts: 0,
-    authenticated: false
+    authenticated: false,
+    attempts: 0
   },
   ui: {
     currentPage: "home",
     darkMode: false
-  },
-  finance: {
-    movimenti: []
   }
 };
