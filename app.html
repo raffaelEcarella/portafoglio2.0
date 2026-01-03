@@ -17,119 +17,87 @@
 
 <main class="main-container">
 
-  <!-- MENU PRINCIPALE -->
-  <section id="menu" class="page active center-page">
-    <div class="card center-card">
-      <h2>Menu</h2>
-      <button data-page="saldo">Saldo</button>
-      <button data-page="movimenti">Movimenti</button>
-      <button data-page="grafici">Grafici</button>
-      <button data-page="calendario">Calendario</button>
-      <button data-page="impostazioni">Impostazioni</button>
-    </div>
-  </section>
+<section id="menu" class="page active center-page">
+  <div class="card center-card">
+    <h2>Menu</h2>
+    <button data-page="saldo">Saldo</button>
+    <button data-page="movimenti">Movimenti</button>
+    <button data-page="grafici">Grafici</button>
+    <button data-page="calendario">Calendario</button>
+    <button data-page="impostazioni">Impostazioni</button>
+  </div>
+</section>
 
-  <!-- SALDO -->
-  <section id="saldo" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Saldo attuale</h3>
-      <div id="saldoVal">€0</div>
-      <button id="addMovimentoBtn">Aggiungi Movimento</button>
-    </div>
-  </section>
+<section id="saldo" class="page center-page">
+  <button class="homeBtn">🏠 Home</button>
+  <div class="card center-card">
+    <h3>Saldo attuale</h3>
+    <div id="saldoVal">€0</div>
+    <button id="addEntrataBtn">➕ Aggiungi Entrata</button>
+    <button id="addSpesaBtn">➖ Aggiungi Spesa</button>
+  </div>
+</section>
 
-  <!-- MOVIMENTI -->
-  <section id="movimenti" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Filtri Movimenti</h3>
-      <label>Categoria:</label>
-      <input type="text" id="filterCategoria">
-      <label>Da:</label>
-      <input type="date" id="filterDa">
-      <label>A:</label>
-      <input type="date" id="filterA">
-      <div class="btn-row">
-        <button id="applyFiltersBtn">Applica Filtri</button>
-        <button id="clearFiltersBtn">Pulisci Filtri</button>
-      </div>
-    </div>
-    <div class="card center-card">
-      <h3>Lista Movimenti</h3>
-      <ul id="movimentiList"></ul>
-    </div>
-  </section>
+<section id="movimenti" class="page center-page">
+  <button class="homeBtn">🏠 Home</button>
+  <div class="card center-card">
+    <h3>Lista Movimenti</h3>
+    <ul id="movimentiList"></ul>
+  </div>
+</section>
 
-  <!-- GRAFICI -->
-  <section id="grafici" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Grafico Categorie</h3>
-      <canvas id="graficoCategorie"></canvas>
-    </div>
-    <div class="card center-card">
-      <h3>Saldo Ultimi 30 Giorni</h3>
-      <canvas id="graficoSaldo"></canvas>
-    </div>
-    <div class="card center-card">
-      <h3>Previsioni 15 Giorni</h3>
-      <ul id="previsioniList"></ul>
-    </div>
-  </section>
+<section id="grafici" class="page center-page">
+  <button class="homeBtn">🏠 Home</button>
+  <div class="card center-card">
+    <h3>Grafico Categorie</h3>
+    <canvas id="graficoCategorie"></canvas>
+  </div>
+</section>
 
-  <!-- CALENDARIO -->
-  <section id="calendario" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Calendario Movimenti</h3>
-      <table id="calendarioTable">
-        <thead><tr><th>Data</th><th>Entrate</th><th>Spese</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
+<section id="calendario" class="page center-page">
+  <button class="homeBtn">🏠 Home</button>
+  <div class="card center-card">
+    <h3>Calendario</h3>
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Importo</th></tr>
+      </thead>
+      <tbody id="calendarioBody"></tbody>
+    </table>
+  </div>
+</section>
 
-  <!-- IMPOSTAZIONI -->
-  <section id="impostazioni" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Impostazioni</h3>
-      <button id="darkToggle2">🌙 Dark Mode</button>
-      <label>Colore Entrate:</label>
-      <input type="color" id="colorEntrate" value="#28a745">
-      <label>Colore Spese:</label>
-      <input type="color" id="colorSpese" value="#dc3545">
-      <label>Colore Traguardo:</label>
-      <input type="color" id="colorTraguardo" value="#ffc107">
-      <label>Colore Saldo:</label>
-      <input type="color" id="colorSaldo" value="#007bff">
-    </div>
-  </section>
+<section id="impostazioni" class="page center-page">
+  <button class="homeBtn">🏠 Home</button>
+  <div class="card center-card">
+    <h3>Impostazioni</h3>
+    <button id="darkToggle2">🌙 Dark Mode</button>
+  </div>
+</section>
 
 </main>
 
-<!-- MODAL AGGIUNGI/MODIFICA -->
+<!-- MODAL -->
 <div id="movimentoModal" class="modal">
-  <div class="modal-content center-card">
-    <h2 id="modalTitle">Aggiungi Movimento</h2>
+  <div class="modal-content">
+    <h2 id="modalTitle"></h2>
+
     <label>Descrizione</label>
-    <input type="text" id="movDescrizione">
+    <input id="movDescrizione" type="text">
+
     <label>Importo</label>
-    <input type="number" id="movImporto">
-    <label>Tipo</label>
-    <select id="movTipo">
-      <option value="entrata">Entrata</option>
-      <option value="spesa">Spesa</option>
-    </select>
-    <label>Categoria</label>
-    <input type="text" id="movCategoria">
+    <input id="movImporto" type="number">
+
     <label>Data</label>
-    <input type="date" id="movData">
-    <label>Ricorrenza (mesi)</label>
-    <input type="number" id="movRicorrenza" value="0">
+    <input id="movData" type="date">
+
+    <label id="ricLabel">Ricorrenza (mesi)</label>
+    <input id="movRicorrenza" type="number" value="0">
+
+    <input type="hidden" id="movTipo">
+
     <div class="modal-buttons">
-      <button id="saveMovimentoBtn">Aggiungi</button>
+      <button id="saveMovimentoBtn">Salva</button>
       <button id="cancelMovimentoBtn">Annulla</button>
     </div>
   </div>
