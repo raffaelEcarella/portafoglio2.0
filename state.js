@@ -1,16 +1,18 @@
+// CC99 - State iniziale dell'app
+
 const appState = {
-  wallets: [
-    {
-      id: "total",
-      nome: "Totale",
-      colore: "#1e40af",
-      includeCharts: true,
-      traguardo: 1000,
-      movimenti: []
-    }
-  ],
-  selectedWallet: "total",
+  finance: {
+    saldo: 0,
+    wallets: [], // Array di portafogli {id, nome, colore, movimenti:[]}
+    traguardo: 1000
+  },
   ui: {
-    darkMode: false
+    darkMode: false,
+    chartColors: {
+      entrate: "#009246", // verde bandiera
+      spese: "#CE2B37",   // rosso sangue piccione
+      traguardo: "#FFC107", // giallo
+      saldo: "#007bff"
+    }
   }
 };
