@@ -1,11 +1,115 @@
-body{margin:0;font-family:Inter;background:#f2f4f8;color:#111}
-header{background:#2563eb;color:white;padding:15px;display:flex;justify-content:space-between}
+:root{
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --primary:#1e40af;
+  --accent:#10b981;
+  --text:#0f172a;
+  --muted:#64748b;
+  --danger:#ef4444;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  justify-content:center;
+}
+
+header{
+  position:fixed;
+  top:0;
+  width:100%;
+  max-width:420px;
+  background:linear-gradient(90deg,var(--primary),#2563eb);
+  color:white;
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:10;
+}
+
+main{
+  width:100%;
+  max-width:420px;
+  padding:90px 12px 40px;
+}
+
 .page{display:none}
-.page.active{display:block}
-.card{background:white;padding:15px;margin:10px;border-radius:10px}
-button{padding:10px;border:none;border-radius:8px;margin:4px}
-.modal{display:none;position:fixed;inset:0;background:#0006;justify-content:center;align-items:center}
-.modal-content{background:white;padding:20px;border-radius:10px}
-.day{border:1px solid #ccc;padding:5px;margin:3px}
-body.dark{background:#111;color:white}
-body.dark .card{background:#1f1f1f}
+.page.active{display:flex;flex-direction:column;gap:12px}
+
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  text-align:center;
+}
+
+button{
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:var(--primary);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+
+button.secondary{
+  background:var(--accent);
+}
+
+button.ghost{
+  background:#e2e8f0;
+  color:var(--text);
+}
+
+.wallet{
+  border-left:6px solid;
+  padding:12px;
+  border-radius:12px;
+  background:#f1f5f9;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+select,input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #cbd5e1;
+  margin:4px 0;
+}
+
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+}
+
+.day{
+  background:#f1f5f9;
+  border-radius:10px;
+  padding:6px;
+  font-size:12px;
+}
+
+.in{color:var(--accent);font-weight:600}
+.out{color:var(--danger);font-weight:600}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#0006;
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal .card{width:90%}
