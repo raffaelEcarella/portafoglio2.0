@@ -3,6 +3,6 @@
   "short_name": "Portafoglio",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f2f4f8",
+  "background_color": "#fdfdfd",
   "theme_color": "#2563eb"
 }
