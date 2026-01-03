@@ -1,248 +1,229 @@
-/* ===============================
-   GENERAL STYLING
-=============================== */
-body {
+/* --- RESET BASE --- */
+* {
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: #f8f9fa url('https://www.transparenttextures.com/patterns/cubes.png') repeat; /* pattern leggero */
-  color: #1c1e21;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- BODY --- */
+body {
+  background: #fdfcf8 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="1" fill="%23e0e0e0"/></svg>') repeat;
+  color: #222;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
-/* ===============================
-   HEADER BAR
-=============================== */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  background: linear-gradient(90deg, #0047ab, #00b386); /* blu + verde smaraldo */
-  color: white;
-  font-weight: 600;
-  font-size: 1.3rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+/* --- DARK MODE --- */
+body.dark {
+  background: #121212 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="1" fill="%23666"/></svg>') repeat;
+  color: #eee;
 }
 
-/* ===============================
-   TOOLBAR / NAVIGATION
-=============================== */
+/* --- TOP BAR --- */
+.topbar {
+  background: linear-gradient(90deg, #007bff, #28a745);
+  color: #fff;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* --- TOOLBAR INFERIORE --- */
 .toolbar {
   display: flex;
   justify-content: space-around;
-  padding: 8px 0;
-  background: #ffffffcc; /* leggermente trasparente */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #ffffffcc;
+  backdrop-filter: blur(5px);
+  border-top: 1px solid #ccc;
+  padding: 10px 0;
   position: sticky;
-  top: 60px; /* sotto header */
-  z-index: 900;
-  border-bottom: 1px solid #ccc;
-}
-
-.toolbar button {
-  padding: 10px 16px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: #007bff;
-  color: white;
-}
-
-.toolbar button:hover {
-  background: #0056b3;
-  transform: translateY(-2px);
-}
-
-/* ===============================
-   MAIN CONTAINER
-=============================== */
-.main-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px;
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-/* ===============================
-   PAGES
-=============================== */
-.page {
-  display: none;
-  width: 100%;
-}
-
-.page.active {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.center-page {
-  justify-content: center;
-}
-
-/* ===============================
-   CARD STYLE
-=============================== */
-.card {
-  background: #ffffffcc;
-  backdrop-filter: blur(10px);
-  padding: 25px;
-  margin: 12px;
-  border-radius: 14px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  transition: all 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-}
-
-/* ===============================
-   CENTERED CARD
-=============================== */
-.center-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* ===============================
-   BUTTONS
-=============================== */
-button {
-  padding: 12px 24px;
-  margin: 6px 0;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-  width: 100%;
-  max-width: 280px;
-  background: #007bff;
-  color: white;
-  transition: all 0.2s;
-}
-
-button:hover {
-  background: #0056b3;
-  transform: translateY(-2px);
-}
-
-button.homeBtn {
-  background: #e9ecef;
-  color: #1c1e21;
-  width: auto;
-  align-self: flex-start;
-}
-
-.btn-row {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-/* ===============================
-   INPUTS
-=============================== */
-input, select {
-  padding: 10px;
-  margin: 6px 0;
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  font-size: 0.95rem;
-}
-
-input[type="color"]{
-  padding: 2px;
-  height: 40px;
-}
-
-/* ===============================
-   MODAL
-=============================== */
-.modal {
-  display: none;
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.5);
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.modal-content {
-  background: #ffffffcc;
-  backdrop-filter: blur(10px);
-  padding: 20px 25px;
-  border-radius: 14px;
-  width: 90%;
-  max-width: 450px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-}
-
-/* ===============================
-   DARK MODE
-=============================== */
-body.dark {
-  background:#121212 url('https://www.transparenttextures.com/patterns/asfalt-dark.png') repeat;
-  color:white;
-}
-
-body.dark .card {
-  background:#1e1e1ecc;
-}
-
-body.dark header {
-  background: linear-gradient(90deg, #1a237e, #004d40);
-}
-
-body.dark button.homeBtn {
-  background:#333;
-  color:white;
+  bottom: 0;
+  z-index: 100;
 }
 
 body.dark .toolbar {
-  background:#1a1a1acc;
-  border-bottom: 1px solid #555;
+  background: #1e1e1ecc;
+  border-top: 1px solid #444;
 }
 
-/* ===============================
-   FOOTER
-=============================== */
-footer {
+/* --- PAGINE --- */
+.page {
+  display: none;
+  padding: 20px;
+  flex: 1;
+}
+
+.page.active {
+  display: block;
+}
+
+/* --- CARD PORTAFOGLI --- */
+.wallet-card {
+  background: linear-gradient(135deg, #ffffff, #f0f0f0);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 10px auto;
+  max-width: 400px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
   text-align: center;
-  font-size: 0.85rem;
-  color: #555;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wallet-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+body.dark .wallet-card {
+  background: #1e1e1e;
+  color: #eee;
+}
+
+/* --- MODALI --- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+body.dark .modal-content {
+  background: #222;
+  color: #eee;
+}
+
+.modal input, .modal select {
+  width: 90%;
+  padding: 8px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+body.dark .modal input, body.dark .modal select {
+  background: #333;
+  color: #eee;
+  border: 1px solid #555;
+}
+
+.modal button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+  background: #007bff;
+  transition: background 0.2s ease;
+}
+
+.modal button:hover {
+  background: #0056b3;
+}
+
+/* --- SALDO --- */
+#saldoVal {
+  font-size: 2rem;
+  text-align: center;
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+/* --- LISTE --- */
+ul {
+  list-style-type: none;
+}
+
+li {
+  background: #f5f5f5;
+  margin: 5px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+body.dark li {
+  background: #2a2a2a;
+}
+
+/* --- TABELLA CALENDARIO --- */
+#calendarioTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#calendarioTable th, #calendarioTable td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+body.dark #calendarioTable th, body.dark #calendarioTable td {
+  border: 1px solid #555;
+}
+
+/* --- INPUT COLORI GRAFICI --- */
+.colorPicker {
+  width: 50px;
+  height: 30px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* --- FOOTER --- */
+.settings-footer {
+  text-align: center;
   margin-top: 20px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+body.dark .settings-footer {
+  color: #aaa;
+}
+
+/* --- BOTTONI PAGINE --- */
+.toolbar button {
+  background: linear-gradient(90deg, #28a745, #007bff);
+  border: none;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.toolbar button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, #1c7c31, #0056b3);
+}
+
+/* --- CENTRATURA TUTTO --- */
+#walletsContainer, #movimentiList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
