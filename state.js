@@ -1,18 +1,36 @@
-// CC99 - State iniziale dell'app
+// CC99 - state.js Portafoglio 2.0
 
 const appState = {
   finance: {
-    saldo: 0,
-    wallets: [], // Array di portafogli {id, nome, colore, movimenti:[]}
-    traguardo: 1000
+    wallets: [
+      // esempio portafoglio iniziale
+      {id:1, name:"Conto Cumulativo", color:"#007bff", movimenti:[], includeInCharts:true}
+    ],
+    traguardo: 1000 // obiettivo finanziario globale
   },
   ui: {
     darkMode: false,
     chartColors: {
-      entrate: "#009246", // verde bandiera
-      spese: "#CE2B37",   // rosso sangue piccione
-      traguardo: "#FFC107", // giallo
-      saldo: "#007bff"
+      entrate: "#28a745",   // verde Italia
+      spese: "#b71c1c",     // rosso sangue piccione
+      traguardo: "#ffc107", // giallo
+      saldo: "#007bff"      // blu principale
     }
   }
 };
+
+// --- SALVATAGGIO E CARICAMENTO ---
+function saveState() {
+  localStorage.setItem("portafoglio2_state", JSON.stringify(appState));
+}
+
+function loadState() {
+  const data = localStorage.getItem("portafoglio2_state");
+  if(data){
+    Object.assign(appState, JSON.parse(data));
+  }
+  // applica dark mode se salvato
+  if(appState.ui.darkMode){
+    document.body.classList.add("dark");
+  }
+}
