@@ -3,55 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portafoglio 2.0 - Versione 0.95</title>
+<title>Portafoglio 2.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<header>
+<!-- BARRA SUPERIORE -->
+<header class="top-bar">
   <h1>Portafoglio 2.0</h1>
-  <button id="darkToggle">🌙</button>
+  <button id="darkToggle" class="dark-btn">🌙</button>
 </header>
+
+<!-- TOOLBAR SOTTO -->
+<nav class="tool-bar">
+  <button data-page="menu">Home</button>
+  <button data-page="saldo">Saldo</button>
+  <button data-page="movimenti">Movimenti</button>
+  <button data-page="grafici">Grafici</button>
+  <button data-page="calendario">Calendario</button>
+  <button data-page="impostazioni">Impostazioni</button>
+</nav>
 
 <main class="main-container">
 
   <!-- MENU PRINCIPALE -->
   <section id="menu" class="page active center-page">
     <div class="card center-card">
-      <h2>Menu</h2>
-      <button data-page="saldo">Saldo</button>
-      <button data-page="movimenti">Movimenti</button>
-      <button data-page="grafici">Grafici</button>
-      <button data-page="calendario">Calendario</button>
-      <button data-page="impostazioni">Impostazioni</button>
+      <h2>Menu Portafogli</h2>
+      <button id="addWalletBtn">➕ Aggiungi Portafoglio</button>
+      <div id="walletsList"></div>
     </div>
   </section>
 
   <!-- SALDO -->
   <section id="saldo" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
     <div class="card center-card">
       <h3>Saldo Totale</h3>
       <div id="saldoVal">€0</div>
-      <div class="btn-row" style="width: 100%;">
-        <button id="addEntrataBtn" class="add-btn">Aggiungi Entrata</button>
-        <button id="addSpesaBtn" class="add-btn spesa">Aggiungi Spesa</button>
-        <button id="addWalletBtn" class="add-btn">Aggiungi Portafoglio</button>
-      </div>
-    </div>
-    <div id="walletsContainer" class="card center-card">
-      <h3>Portafogli</h3>
-      <ul id="walletsList" style="list-style:none; padding:0; width:100%;"></ul>
+      <div id="walletBalances"></div>
+      <button id="addIncomeBtn">➕ Aggiungi Entrata</button>
+      <button id="addExpenseBtn">➕ Aggiungi Spesa</button>
     </div>
   </section>
 
   <!-- MOVIMENTI -->
   <section id="movimenti" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
     <div class="card center-card">
-      <h3>Filtri Movimenti</h3>
+      <h3>Filtra Movimenti</h3>
       <label>Portafoglio:</label>
       <select id="filterWallet"></select>
       <label>Categoria:</label>
@@ -61,42 +61,36 @@
       <label>A:</label>
       <input type="date" id="filterA">
       <div class="btn-row">
-        <button id="applyFiltersBtn">Applica Filtri</button>
-        <button id="clearFiltersBtn">Pulisci Filtri</button>
+        <button id="applyFiltersBtn">Applica</button>
+        <button id="clearFiltersBtn">Pulisci</button>
       </div>
     </div>
     <div class="card center-card">
       <h3>Lista Movimenti</h3>
-      <ul id="movimentiList" style="list-style:none; padding:0; width:100%;"></ul>
+      <ul id="movimentiList"></ul>
     </div>
   </section>
 
   <!-- GRAFICI -->
   <section id="grafici" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
     <div class="card center-card">
-      <h3>Grafico Percentuali</h3>
+      <h3>Grafico Categorie</h3>
       <canvas id="graficoCategorie"></canvas>
     </div>
     <div class="card center-card">
-      <h3>Grafico Progressivo Saldo</h3>
+      <h3>Saldo Progressivo</h3>
       <canvas id="graficoSaldo"></canvas>
-    </div>
-    <div class="card center-card">
-      <h3>Previsioni 15 Giorni</h3>
-      <ul id="previsioniList" style="list-style:none; padding:0; width:100%;"></ul>
     </div>
   </section>
 
   <!-- CALENDARIO -->
   <section id="calendario" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
     <div class="card center-card">
       <h3>Calendario Movimenti</h3>
-      <label>Portafoglio:</label>
+      <label>Seleziona Portafoglio:</label>
       <select id="calendarioWallet"></select>
-      <label>Mese:</label>
-      <input type="month" id="calendarioMonth" value="">
+      <label>Seleziona Mese:</label>
+      <input type="month" id="calendarioMese">
       <table id="calendarioTable">
         <thead><tr><th>Data</th><th>Entrate</th><th>Spese</th></tr></thead>
         <tbody></tbody>
@@ -106,7 +100,6 @@
 
   <!-- IMPOSTAZIONI -->
   <section id="impostazioni" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
     <div class="card center-card">
       <h3>Impostazioni</h3>
       <button id="darkToggle2">🌙 Dark Mode</button>
@@ -118,32 +111,34 @@
       <input type="color" id="colorTraguardo" value="#ffc107">
       <label>Colore Saldo:</label>
       <input type="color" id="colorSaldo" value="#007bff">
-      <div class="settings-footer">CREATED BY CLAUDIONIX99</div>
+      <label>Massimo Portafogli:</label>
+      <input type="number" id="maxWallets" value="6" min="1" max="6">
+      <p style="margin-top:20px; text-align:center; color:#6b7280;">CREATED BY CLAUDIONIX99</p>
     </div>
   </section>
 
 </main>
 
-<!-- MODAL AGGIUNGI/MODIFICA -->
+<!-- MODAL AGGIUNGI MOVIMENTO -->
 <div id="movimentoModal" class="modal">
   <div class="modal-content center-card">
     <h2 id="modalTitle">Aggiungi Movimento</h2>
     <label>Portafoglio:</label>
     <select id="movWallet"></select>
-    <label>Descrizione:</label>
+    <label>Descrizione</label>
     <input type="text" id="movDescrizione">
-    <label>Importo:</label>
+    <label>Importo</label>
     <input type="number" id="movImporto">
-    <label>Tipo:</label>
+    <label>Tipo</label>
     <select id="movTipo">
       <option value="entrata">Entrata</option>
       <option value="spesa">Spesa</option>
     </select>
-    <label>Categoria:</label>
+    <label>Categoria</label>
     <input type="text" id="movCategoria">
-    <label>Data:</label>
+    <label>Data</label>
     <input type="date" id="movData">
-    <label>Ricorrenza (mesi, solo spese):</label>
+    <label>Ricorrenza (mesi)</label>
     <input type="number" id="movRicorrenza" value="0">
     <div class="modal-buttons">
       <button id="saveMovimentoBtn">Salva</button>
@@ -155,13 +150,13 @@
 <!-- MODAL AGGIUNGI PORTAFOGLIO -->
 <div id="walletModal" class="modal">
   <div class="modal-content center-card">
-    <h2>Aggiungi Portafoglio</h2>
-    <label>Nome Portafoglio:</label>
+    <h2>Nuovo Portafoglio</h2>
+    <label>Nome:</label>
     <input type="text" id="walletName">
-    <label>Colore Portafoglio:</label>
+    <label>Colore:</label>
     <input type="color" id="walletColor" value="#007bff">
     <div class="modal-buttons">
-      <button id="saveWalletBtn">Aggiungi</button>
+      <button id="saveWalletBtn">Crea</button>
       <button id="cancelWalletBtn">Annulla</button>
     </div>
   </div>
@@ -171,5 +166,6 @@
 <script src="storage.js"></script>
 <script src="app.js"></script>
 <script src="ui.js"></script>
+
 </body>
 </html>
