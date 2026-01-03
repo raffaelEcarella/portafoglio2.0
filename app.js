@@ -2,269 +2,183 @@
 
 loadState();
 
-// ---------------- SALDO ----------------
+// --- UTILI ---
+function getWalletById(id){
+  return appState.finance.wallets.find(w => w.id === parseInt(id));
+}
+
 function updateSaldo() {
-  let saldoTotale = 0;
-  appState.finance.wallets.forEach(wallet => {
-    wallet.saldo = wallet.movimenti.reduce((acc, m) => m.tipo === "entrata" ? acc + m.importo : acc - m.importo, 0);
-    saldoTotale += wallet.saldo;
-  });
-  document.getElementById("saldoVal").textContent = `€${saldoTotale}`;
-  renderWalletList();
+  const saldo = appState.finance.wallets.reduce((acc, w)=>{
+    return acc + w.movimenti.reduce((s,m)=> m.tipo==="entrata"?s+m.importo:s-m.importo,0);
+  },0);
+  document.getElementById("saldoVal").textContent = `€${saldo.toFixed(2)}`;
+  renderWallets();
   saveState();
 }
 
-// Mostra lista portafogli
-function renderWalletList() {
-  const list = document.getElementById("walletList");
-  const settingsList = document.getElementById("settingsWalletList");
-  list.innerHTML = "";
-  settingsList.innerHTML = "";
-  appState.finance.wallets.forEach(wallet => {
-    const li = document.createElement("li");
-    li.textContent = `${wallet.name}: €${wallet.saldo}`;
-    li.style.color = wallet.color;
-    list.appendChild(li);
-
-    const li2 = document.createElement("li");
-    li2.innerHTML = `<span style="color:${wallet.color}">${wallet.name}</span>`;
-    settingsList.appendChild(li2);
+// --- RENDER PORTAFOGLI ---
+function renderWallets(){
+  const container = document.getElementById("walletsList");
+  container.innerHTML="";
+  appState.finance.wallets.forEach(w=>{
+    const li=document.createElement("li");
+    li.textContent=`${w.name} - €${w.movimenti.reduce((s,m)=> m.tipo==="entrata"?s+m.importo:s-m.importo,0).toFixed(2)}`;
+    li.style.color=w.color;
+    container.appendChild(li);
   });
-  renderWalletSelects();
-}
 
-// Aggiorna i select dei portafogli
-function renderWalletSelects() {
-  const movWallet = document.getElementById("movWallet");
+  // aggiorna select filtri e modal
   const filterWallet = document.getElementById("filterWallet");
   const calendarioWallet = document.getElementById("calendarioWallet");
-
-  [movWallet, filterWallet, calendarioWallet].forEach(sel => {
-    sel.innerHTML = "";
-    const allOption = document.createElement("option");
-    allOption.value = 0;
-    allOption.textContent = "Tutti";
-    sel.appendChild(allOption);
-    appState.finance.wallets.forEach(wallet => {
-      const option = document.createElement("option");
-      option.value = wallet.id;
-      option.textContent = wallet.name;
-      sel.appendChild(option);
+  const movWallet = document.getElementById("movWallet");
+  [filterWallet, calendarioWallet, movWallet].forEach(sel=>{
+    sel.innerHTML="";
+    appState.finance.wallets.forEach(w=>{
+      const opt=document.createElement("option");
+      opt.value=w.id;
+      opt.textContent=w.name;
+      sel.appendChild(opt);
     });
   });
 }
 
-// ---------------- MOVIMENTI ----------------
-function addMovimento(tipo) {
-  document.getElementById("modalTitle").textContent = tipo === "entrata" ? "Aggiungi Entrata" : "Aggiungi Spesa";
-  document.getElementById("movTipo").value = tipo;
-  document.getElementById("movDescrizione").value = "";
-  document.getElementById("movImporto").value = "";
-  document.getElementById("movCategoria").value = "";
+// --- MODAL MOVIMENTO ---
+function openMovimentoModal(tipo){
+  document.getElementById("modalTitle").textContent = tipo==="entrata"?"Aggiungi Entrata":"Aggiungi Spesa";
+  document.getElementById("movTipo").value=tipo;
+  document.getElementById("movDescrizione").value="";
+  document.getElementById("movImporto").value="";
+  document.getElementById("movCategoria").value="";
   document.getElementById("movData").valueAsDate = new Date();
-  document.getElementById("movRicorrenza").value = 0;
-  document.getElementById("movimentoModal").style.display = "flex";
+  document.getElementById("movRicorrenza").value=0;
+  document.getElementById("movimentoModal").style.display="flex";
 }
 
-document.getElementById("addEntrataBtn").onclick = () => addMovimento("entrata");
-document.getElementById("addSpesaBtn").onclick = () => addMovimento("spesa");
+document.getElementById("addEntrataBtn").onclick = ()=>openMovimentoModal("entrata");
+document.getElementById("addSpesaBtn").onclick = ()=>openMovimentoModal("spesa");
+document.getElementById("cancelMovimentoBtn").onclick = ()=>document.getElementById("movimentoModal").style.display="none";
 
-// Salva movimento
-document.getElementById("saveMovimentoBtn").onclick = () => {
-  const tipo = document.getElementById("movTipo").value;
-  const descr = document.getElementById("movDescrizione").value;
-  const importo = parseFloat(document.getElementById("movImporto").value);
-  const categoria = document.getElementById("movCategoria").value;
-  const data = document.getElementById("movData").value;
+// --- SALVA MOVIMENTO ---
+document.getElementById("saveMovimentoBtn").onclick = ()=>{
   const walletId = parseInt(document.getElementById("movWallet").value);
+  const wallet = getWalletById(walletId);
+  if(!wallet) return alert("Portafoglio non trovato");
+
+  const mov = {
+    tipo: document.getElementById("movTipo").value,
+    descrizione: document.getElementById("movDescrizione").value,
+    importo: parseFloat(document.getElementById("movImporto").value),
+    categoria: document.getElementById("movCategoria").value,
+    data: document.getElementById("movData").value,
+  };
+
+  wallet.movimenti.push(mov);
+
+  // gestisci ricorrenza solo per spese
   const ricorrenza = parseInt(document.getElementById("movRicorrenza").value);
-
-  const wallet = appState.finance.wallets.find(w => w.id === walletId) || appState.finance.wallets[0];
-
-  for(let i=0; i<=ricorrenza; i++){
-    const mov = {
-      tipo, descrizione: descr, importo,
-      categoria, data: addMonths(data,i)
-    };
-    wallet.movimenti.push(mov);
+  if(mov.tipo==="spesa" && ricorrenza>0){
+    const d = new Date(mov.data);
+    for(let i=1;i<=ricorrenza;i++){
+      const newDate = new Date(d);
+      newDate.setMonth(d.getMonth()+i);
+      wallet.movimenti.push({...mov, data: newDate.toISOString().slice(0,10)});
+    }
   }
 
-  document.getElementById("movimentoModal").style.display = "none";
+  document.getElementById("movimentoModal").style.display="none";
   updateSaldo();
-  renderMovimenti();
-  renderGrafici();
-  renderCalendario();
+};
+
+// --- MODAL PORTAFOGLIO ---
+document.getElementById("addWalletBtn").onclick = ()=>{
+  if(appState.finance.wallets.length>=6) return alert("Massimo 6 portafogli");
+  document.getElementById("walletName").value="";
+  document.getElementById("walletColor").value="#007bff";
+  document.getElementById("walletModal").style.display="flex";
+};
+
+document.getElementById("cancelWalletBtn").onclick = ()=>document.getElementById("walletModal").style.display="none";
+
+document.getElementById("saveWalletBtn").onclick = ()=>{
+  const name = document.getElementById("walletName").value.trim();
+  const color = document.getElementById("walletColor").value;
+  if(!name) return alert("Nome portafoglio richiesto");
+
+  const newWallet = {
+    id: Date.now(),
+    name: name,
+    color: color,
+    movimenti: [],
+    includeInCharts:true
+  };
+
+  appState.finance.wallets.push(newWallet);
+  document.getElementById("walletModal").style.display="none";
+  renderWallets();
+  updateSaldo();
+};
+
+// --- SALDO GIORNALIERO ---
+function saldoGiornaliero(wallet){
+  const oggi = new Date().toISOString().slice(0,10);
+  return wallet.movimenti.reduce((s,m)=> m.data<=oggi ? (m.tipo==="entrata"?s+m.importo:s-m.importo):s ,0);
 }
 
-// Cancella modal
-document.getElementById("cancelMovimentoBtn").onclick = () => {
-  document.getElementById("movimentoModal").style.display = "none";
-}
-
-// Helper aggiungi mesi
-function addMonths(dateStr, months){
-  const date = new Date(dateStr);
-  date.setMonth(date.getMonth()+months);
-  return date.toISOString().split("T")[0];
-}
-
-// ---------------- FILTRI MOVIMENTI ----------------
-function renderMovimenti() {
-  const ul = document.getElementById("movimentiList");
+// --- FILTRI MOVIMENTI ---
+document.getElementById("applyFiltersBtn").onclick = ()=>{
   const walletId = parseInt(document.getElementById("filterWallet").value);
-  const categoria = document.getElementById("filterCategoria").value.toLowerCase();
+  const wallet = getWalletById(walletId);
+  const cat = document.getElementById("filterCategoria").value.toLowerCase();
   const da = document.getElementById("filterDa").value;
   const a = document.getElementById("filterA").value;
 
-  let movs = [];
-  appState.finance.wallets.forEach(wallet=>{
-    if(walletId===0 || wallet.id===walletId){
-      movs = movs.concat(wallet.movimenti);
-    }
+  const list = wallet.movimenti.filter(m=>{
+    return (!cat || m.categoria.toLowerCase().includes(cat)) &&
+           (!da || m.data>=da) &&
+           (!a || m.data<=a);
   });
 
-  if(categoria) movs = movs.filter(m=>m.categoria.toLowerCase().includes(categoria));
-  if(da) movs = movs.filter(m=>m.data>=da);
-  if(a) movs = movs.filter(m=>m.data<=a);
-
-  ul.innerHTML = "";
-  movs.sort((a,b)=>a.data.localeCompare(b.data)).forEach(m=>{
-    const li = document.createElement("li");
-    li.textContent = `${m.data} - ${m.tipo.toUpperCase()} €${m.importo} [${m.categoria}] ${m.descrizione}`;
+  const ul = document.getElementById("movimentiList");
+  ul.innerHTML="";
+  list.forEach(m=>{
+    const li=document.createElement("li");
+    li.textContent = `${m.data} | ${m.tipo.toUpperCase()} | ${m.descrizione} | €${m.importo.toFixed(2)}`;
     li.style.color = m.tipo==="entrata"?appState.ui.chartColors.entrate:appState.ui.chartColors.spese;
     ul.appendChild(li);
   });
-}
+};
 
-// Filtri
-document.getElementById("applyFiltersBtn").onclick = renderMovimenti;
-document.getElementById("clearFiltersBtn").onclick = () => {
+document.getElementById("clearFiltersBtn").onclick = ()=>{
   document.getElementById("filterCategoria").value="";
   document.getElementById("filterDa").value="";
   document.getElementById("filterA").value="";
-  document.getElementById("filterWallet").value="0";
-  renderMovimenti();
-}
+  document.getElementById("applyFiltersBtn").click();
+};
 
-// ---------------- AGGIUNGI PORTAFOGLIO ----------------
-function addWallet() {
-  if(appState.finance.wallets.length>=6){
-    alert("Hai raggiunto il massimo di 6 portafogli!");
-    return;
-  }
-  const name = prompt("Nome del nuovo portafoglio:");
-  if(!name) return;
-  const color = prompt("Colore del portafoglio (es. #007bff):", "#007bff");
-  const id = appState.finance.wallets.length ? Math.max(...appState.finance.wallets.map(w=>w.id))+1 : 1;
-  appState.finance.wallets.push({id, name, color, movimenti:[], includeInCharts:true});
-  updateSaldo();
-  renderGrafici();
-}
-
-document.getElementById("addWalletBtn").onclick = addWallet;
-document.getElementById("addWalletBtnSettings").onclick = addWallet;
-
-// ---------------- GRAFICI ----------------
-let chartCategorie=null;
-let chartSaldo=null;
-
-function renderGrafici() {
-  const wallets = appState.finance.wallets.filter(w=>w.includeInCharts);
-  const entrate = wallets.reduce((acc,w)=>acc+w.movimenti.filter(m=>m.tipo==="entrata").reduce((a,b)=>a+b.importo,0),0);
-  const spese = wallets.reduce((acc,w)=>acc+w.movimenti.filter(m=>m.tipo==="spesa").reduce((a,b)=>a+b.importo,0),0);
-  const traguardo = appState.finance.traguardo;
-
-  const ctx1 = document.getElementById("graficoCategorie").getContext("2d");
-  if(chartCategorie) chartCategorie.destroy();
-  chartCategorie = new Chart(ctx1,{
-    type:'doughnut',
-    data:{
-      labels:['Entrate','Spese','Traguardo'],
-      datasets:[{data:[entrate,spese,traguardo], backgroundColor:[
-        appState.ui.chartColors.entrate,
-        appState.ui.chartColors.spese,
-        appState.ui.chartColors.traguardo
-      ]}]
-    },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{display:true, position:'bottom'},
-        tooltip:{callbacks:{label:ctx=>`${ctx.label}: €${ctx.raw} (${((ctx.raw/(entrate+spese+traguardo))*100).toFixed(1)}%)`}}
-      }
-    }
-  });
-
-  // Grafico saldo progressivo
-  const ctx2 = document.getElementById("graficoSaldo").getContext("2d");
-  if(chartSaldo) chartSaldo.destroy();
-  let labels = [];
-  let data = [];
-  wallets.forEach(wallet=>{
-    wallet.movimenti.sort((a,b)=>a.data.localeCompare(b.data));
-    wallet.movimenti.forEach(m=>{
-      labels.push(m.data);
-      data.push(m.tipo==="entrata"?m.importo:-m.importo);
-    });
-  });
-
-  chartSaldo = new Chart(ctx2,{
-    type:'bar',
-    data:{labels:labels, datasets:[{label:'Saldo', data:data, backgroundColor:appState.ui.chartColors.saldo}]},
-    options:{responsive:true, plugins:{legend:{display:true}}, scales:{x:{title:{display:true,text:'Data'}},y:{title:{display:true,text:'Saldo'}}}}
-  });
-}
-
-// ---------------- CALENDARIO ----------------
-function renderCalendario() {
-  const tableBody = document.querySelector("#calendarioTable tbody");
-  const selectedWalletId = parseInt(document.getElementById("calendarioWallet").value);
-  const monthInput = document.getElementById("calendarioMonth").value || new Date().toISOString().slice(0,7);
-  const [year, month] = monthInput.split("-").map(Number);
-  const daysInMonth = new Date(year, month, 0).getDate();
-
-  tableBody.innerHTML = "";
-  for(let d=1; d<=daysInMonth; d++){
-    const dayStr = `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    let entrate = 0;
-    let spese = 0;
-    appState.finance.wallets.forEach(wallet=>{
-      if(selectedWalletId===0 || wallet.id===selectedWalletId){
-        wallet.movimenti.forEach(m=>{
-          if(m.data===dayStr){
-            if(m.tipo==="entrata") entrate+=m.importo;
-            else spese+=m.importo;
-          }
-        });
-      }
-    });
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${dayStr}</td><td style="color:${appState.ui.chartColors.entrate}">€${entrate}</td><td style="color:${appState.ui.chartColors.spese}">€${spese}</td>`;
-    tableBody.appendChild(tr);
-  }
-}
-
-// Aggiorna calendario al cambio select
+// --- CALENDARIO ---
 document.getElementById("calendarioWallet").onchange = renderCalendario;
 document.getElementById("calendarioMonth").onchange = renderCalendario;
 
-// ---------------- DARK MODE ----------------
-document.getElementById("darkToggle").onclick = toggleDarkMode;
-document.getElementById("darkToggle2").onclick = toggleDarkMode;
-function toggleDarkMode(){
-  document.body.classList.toggle("dark");
-  appState.ui.darkMode = document.body.classList.contains("dark");
-  saveState();
+function renderCalendario(){
+  const walletId = parseInt(document.getElementById("calendarioWallet").value);
+  const wallet = getWalletById(walletId);
+  const month = document.getElementById("calendarioMonth").value; // YYYY-MM
+  if(!wallet || !month) return;
+  const [y,m] = month.split("-");
+
+  const tbody = document.querySelector("#calendarioTable tbody");
+  tbody.innerHTML="";
+  const daysInMonth = new Date(y, m, 0).getDate();
+  for(let d=1;d<=daysInMonth;d++){
+    const day = `${y}-${m.padStart(2,"0")}-${d.toString().padStart(2,"0")}`;
+    const entrate = wallet.movimenti.filter(m=>m.tipo==="entrata" && m.data===day).reduce((s,m)=>s+m.importo,0);
+    const spese = wallet.movimenti.filter(m=>m.tipo==="spesa" && m.data===day).reduce((s,m)=>s+m.importo,0);
+    const tr = document.createElement("tr");
+    tr.innerHTML=`<td>${day}</td><td style="color:${appState.ui.chartColors.entrate}">€${entrate.toFixed(2)}</td><td style="color:${appState.ui.chartColors.spese}">€${spese.toFixed(2)}</td>`;
+    tbody.appendChild(tr);
+  }
 }
 
-// ---------------- COLORI GRAFICI ----------------
-document.getElementById("colorEntrate").onchange = e=>{appState.ui.chartColors.entrate=e.target.value; saveState(); renderGrafici();}
-document.getElementById("colorSpese").onchange = e=>{appState.ui.chartColors.spese=e.target.value; saveState(); renderGrafici();}
-document.getElementById("colorTraguardo").onchange = e=>{appState.ui.chartColors.traguardo=e.target.value; saveState(); renderGrafici();}
-document.getElementById("colorSaldo").onchange = e=>{appState.ui.chartColors.saldo=e.target.value; saveState(); renderGrafici();}
-
-// ---------------- INIZIALIZZAZIONE ----------------
+// --- INIZIALIZZAZIONE ---
+renderWallets();
 updateSaldo();
-renderMovimenti();
-renderGrafici();
-renderCalendario();
