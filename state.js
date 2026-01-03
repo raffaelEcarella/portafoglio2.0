@@ -3,11 +3,11 @@ const appState = {
     {
       id: "total",
       nome: "Totale",
-      colore: "#2563eb",
+      colore: "#1e40af",
       includeCharts: true,
       movimenti: []
     }
   ],
-  activeWallet: "total",
+  selectedWallet: "total",
   ui: { darkMode: false }
 };
