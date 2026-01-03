@@ -10,5 +10,7 @@ const appState = {
     }
   ],
   selectedWallet: "total",
-  ui: { darkMode: false }
+  ui: {
+    darkMode: false
+  }
 };
