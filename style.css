@@ -1,229 +1,205 @@
-/* --- RESET BASE --- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+/* CC99 - style.css Portafoglio 2.0 */
 
-/* --- BODY --- */
 body {
-  background: #fdfcf8 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="1" fill="%23e0e0e0"/></svg>') repeat;
-  color: #222;
-  min-height: 100vh;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #fdfcfb, #e2e8f0); /* sfondo perlato elegante */
+  color: #1f2937;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-/* --- DARK MODE --- */
-body.dark {
-  background: #121212 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="1" fill="%23666"/></svg>') repeat;
-  color: #eee;
-}
-
-/* --- TOP BAR --- */
-.topbar {
-  background: linear-gradient(90deg, #007bff, #28a745);
-  color: #fff;
-  padding: 15px;
-  text-align: center;
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: linear-gradient(90deg,#2563eb,#10b981);
+  color: white;
   font-size: 1.5rem;
-  font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  font-weight: 700;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-/* --- TOOLBAR INFERIORE --- */
+/* TOOLBAR INFERIORE */
 .toolbar {
   display: flex;
   justify-content: space-around;
-  background: #ffffffcc;
-  backdrop-filter: blur(5px);
-  border-top: 1px solid #ccc;
   padding: 10px 0;
-  position: sticky;
-  bottom: 0;
-  z-index: 100;
+  background: linear-gradient(90deg,#2563eb,#10b981);
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
 }
-
-body.dark .toolbar {
-  background: #1e1e1ecc;
-  border-top: 1px solid #444;
-}
-
-/* --- PAGINE --- */
-.page {
-  display: none;
-  padding: 20px;
-  flex: 1;
-}
-
-.page.active {
-  display: block;
-}
-
-/* --- CARD PORTAFOGLI --- */
-.wallet-card {
-  background: linear-gradient(135deg, #ffffff, #f0f0f0);
-  border-radius: 12px;
-  padding: 15px;
-  margin: 10px auto;
-  max-width: 400px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  text-align: center;
-  font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.wallet-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-}
-
-body.dark .wallet-card {
-  background: #1e1e1e;
-  color: #eee;
-}
-
-/* --- MODALI --- */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  max-width: 400px;
-  width: 90%;
-  text-align: center;
-}
-
-body.dark .modal-content {
-  background: #222;
-  color: #eee;
-}
-
-.modal input, .modal select {
-  width: 90%;
-  padding: 8px;
-  margin: 8px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-body.dark .modal input, body.dark .modal select {
-  background: #333;
-  color: #eee;
-  border: 1px solid #555;
-}
-
-.modal button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #fff;
-  background: #007bff;
-  transition: background 0.2s ease;
-}
-
-.modal button:hover {
-  background: #0056b3;
-}
-
-/* --- SALDO --- */
-#saldoVal {
-  font-size: 2rem;
-  text-align: center;
-  margin: 15px 0;
-  font-weight: bold;
-}
-
-/* --- LISTE --- */
-ul {
-  list-style-type: none;
-}
-
-li {
-  background: #f5f5f5;
-  margin: 5px 0;
-  padding: 8px 12px;
-  border-radius: 8px;
-}
-
-body.dark li {
-  background: #2a2a2a;
-}
-
-/* --- TABELLA CALENDARIO --- */
-#calendarioTable {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-#calendarioTable th, #calendarioTable td {
-  padding: 8px;
-  text-align: center;
-  border: 1px solid #ccc;
-}
-
-body.dark #calendarioTable th, body.dark #calendarioTable td {
-  border: 1px solid #555;
-}
-
-/* --- INPUT COLORI GRAFICI --- */
-.colorPicker {
-  width: 50px;
-  height: 30px;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-/* --- FOOTER --- */
-.settings-footer {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-body.dark .settings-footer {
-  color: #aaa;
-}
-
-/* --- BOTTONI PAGINE --- */
 .toolbar button {
-  background: linear-gradient(90deg, #28a745, #007bff);
-  border: none;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  flex:1;
+  margin:0 5px;
+  padding:12px 0;
+  border-radius:10px;
+  font-weight:600;
+  color:white;
+  border:none;
+  cursor:pointer;
+  transition:0.3s;
 }
-
 .toolbar button:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(90deg, #1c7c31, #0056b3);
+  opacity:0.85;
 }
 
-/* --- CENTRATURA TUTTO --- */
-#walletsContainer, #movimentiList {
+/* CONTAINER PRINCIPALE */
+.main-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+/* PAGINE */
+.page {
+  display: none;
+  width: 100%;
+}
+.page.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+.center-card {
+  align-items: center;
+}
+
+/* BOTTONI */
+button {
+  padding: 12px 20px;
+  margin: 5px 0;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  background: #2563eb;
+  color: white;
+  transition: 0.3s;
+}
+button:hover {
+  opacity: 0.85;
+}
+button.homeBtn {
+  background: #e5e7eb;
+  color: #1f2937;
+  width: auto;
+  align-self: flex-start;
+}
+
+/* INPUT & SELECT */
+input, select {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* MODALE */
+.modal {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 450px;
+}
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* DARK MODE */
+body.dark {
+  background: linear-gradient(135deg,#1f2937,#111827);
+  color:white;
+}
+body.dark .card {
+  background:#1f1f1f;
+}
+body.dark header, body.dark .toolbar {
+  background: linear-gradient(90deg,#111827,#2563eb);
+}
+body.dark button.homeBtn {
+  background:#333;
+  color:white;
+}
+
+/* BOTTONI FILTRI */
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* TABLE CALENDARIO */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top:10px;
+}
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align:center;
+  border-radius:4px;
+}
+table th {
+  background:#2563eb;
+  color:white;
+}
+
+/* WALLET CARD */
+.wallet-card {
+  padding:15px;
+  margin:10px 0;
+  border-radius:12px;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:600;
+  font-size:1rem;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* FOOTER IMPOSTAZIONI */
+#settingsFooter {
+  text-align:center;
+  font-size:0.8rem;
+  color:#555;
+  margin-top:15px;
 }
