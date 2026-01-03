@@ -18,8 +18,9 @@
 
 <section id="home" class="page active">
   <div class="card">
-    <h3>Saldo Totale</h3>
+    <h3>Saldo totale ad oggi</h3>
     <h1 id="saldoTotale">€0</h1>
+    <small id="oggiLabel"></small>
   </div>
 
   <div class="card">
@@ -35,25 +36,16 @@
   </div>
 </section>
 
-<section id="movimenti" class="page">
-  <button class="ghost homeBtn">🏠</button>
-  <div class="card">
-    <select id="walletFilter"></select>
-    <button onclick="openModal('entrata')">➕ Entrata</button>
-    <button onclick="openModal('spesa')" class="secondary">➖ Spesa</button>
-    <ul id="movimentiList"></ul>
-  </div>
-</section>
-
 <section id="grafici" class="page">
   <button class="ghost homeBtn">🏠</button>
+
   <div class="card">
     <select id="walletChartSelect"></select>
-    <select id="periodSelect">
-      <option value="week">Settimanale</option>
-      <option value="month">Mensile</option>
-    </select>
-    <canvas id="graficoSaldo"></canvas>
+    <canvas id="graficoPercentuali"></canvas>
+  </div>
+
+  <div class="card">
+    <canvas id="graficoProgressivo"></canvas>
   </div>
 </section>
 
@@ -61,25 +53,12 @@
   <button class="ghost homeBtn">🏠</button>
   <div class="card">
     <select id="walletCalendarSelect"></select>
+    <input type="month" id="calendarMonth">
     <div id="calendar" class="calendar"></div>
   </div>
 </section>
 
 </main>
-
-<div id="movimentoModal" class="modal">
-  <div class="card">
-    <h3 id="modalTitle"></h3>
-    <input id="movDescrizione" placeholder="Descrizione">
-    <input id="movImporto" type="number" placeholder="Importo">
-    <input id="movData" type="date">
-    <select id="movWallet"></select>
-    <input id="movRicorrenza" type="number" value="0">
-    <input type="hidden" id="movTipo">
-    <button onclick="saveMovimento()">Salva</button>
-    <button class="ghost" onclick="closeModal()">Annulla</button>
-  </div>
-</div>
 
 <script src="state.js"></script>
 <script src="storage.js"></script>
