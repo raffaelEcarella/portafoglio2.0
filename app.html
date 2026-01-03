@@ -10,48 +10,48 @@
 </head>
 <body>
 
-<!-- BARRA SUPERIORE -->
-<header class="top-bar">
+<!-- HEADER -->
+<header>
   <h1>Portafoglio 2.0</h1>
-  <button id="darkToggle" class="dark-btn">🌙</button>
+  <button id="darkToggle">🌙</button>
 </header>
 
-<!-- TOOLBAR SOTTO -->
-<nav class="tool-bar">
+<!-- TOOLBAR -->
+<div class="toolbar">
   <button data-page="menu">Home</button>
   <button data-page="saldo">Saldo</button>
   <button data-page="movimenti">Movimenti</button>
   <button data-page="grafici">Grafici</button>
   <button data-page="calendario">Calendario</button>
   <button data-page="impostazioni">Impostazioni</button>
-</nav>
+</div>
 
+<!-- MAIN CONTAINER -->
 <main class="main-container">
 
   <!-- MENU PRINCIPALE -->
   <section id="menu" class="page active center-page">
     <div class="card center-card">
-      <h2>Menu Portafogli</h2>
-      <button id="addWalletBtn">➕ Aggiungi Portafoglio</button>
-      <div id="walletsList"></div>
+      <h2>Menu</h2>
+      <button id="addWalletBtn">Aggiungi Portafoglio</button>
+      <div id="walletsContainer"></div>
     </div>
   </section>
 
   <!-- SALDO -->
   <section id="saldo" class="page center-page">
     <div class="card center-card">
-      <h3>Saldo Totale</h3>
+      <h3>Saldo Cumulativo</h3>
       <div id="saldoVal">€0</div>
-      <div id="walletBalances"></div>
-      <button id="addIncomeBtn">➕ Aggiungi Entrata</button>
-      <button id="addExpenseBtn">➕ Aggiungi Spesa</button>
+      <button id="addIncomeBtn">Aggiungi Entrata</button>
+      <button id="addExpenseBtn">Aggiungi Spesa</button>
     </div>
   </section>
 
   <!-- MOVIMENTI -->
   <section id="movimenti" class="page center-page">
     <div class="card center-card">
-      <h3>Filtra Movimenti</h3>
+      <h3>Filtri Movimenti</h3>
       <label>Portafoglio:</label>
       <select id="filterWallet"></select>
       <label>Categoria:</label>
@@ -61,8 +61,8 @@
       <label>A:</label>
       <input type="date" id="filterA">
       <div class="btn-row">
-        <button id="applyFiltersBtn">Applica</button>
-        <button id="clearFiltersBtn">Pulisci</button>
+        <button id="applyFiltersBtn">Applica Filtri</button>
+        <button id="clearFiltersBtn">Pulisci Filtri</button>
       </div>
     </div>
     <div class="card center-card">
@@ -78,8 +78,12 @@
       <canvas id="graficoCategorie"></canvas>
     </div>
     <div class="card center-card">
-      <h3>Saldo Progressivo</h3>
+      <h3>Saldo Ultimi 30 Giorni</h3>
       <canvas id="graficoSaldo"></canvas>
+    </div>
+    <div class="card center-card">
+      <h3>Previsioni 15 Giorni</h3>
+      <ul id="previsioniList"></ul>
     </div>
   </section>
 
@@ -87,10 +91,10 @@
   <section id="calendario" class="page center-page">
     <div class="card center-card">
       <h3>Calendario Movimenti</h3>
-      <label>Seleziona Portafoglio:</label>
-      <select id="calendarioWallet"></select>
-      <label>Seleziona Mese:</label>
-      <input type="month" id="calendarioMese">
+      <label>Portafoglio:</label>
+      <select id="calendarWallet"></select>
+      <label>Mese:</label>
+      <input type="month" id="calendarMonth">
       <table id="calendarioTable">
         <thead><tr><th>Data</th><th>Entrate</th><th>Spese</th></tr></thead>
         <tbody></tbody>
@@ -111,52 +115,50 @@
       <input type="color" id="colorTraguardo" value="#ffc107">
       <label>Colore Saldo:</label>
       <input type="color" id="colorSaldo" value="#007bff">
-      <label>Massimo Portafogli:</label>
-      <input type="number" id="maxWallets" value="6" min="1" max="6">
-      <p style="margin-top:20px; text-align:center; color:#6b7280;">CREATED BY CLAUDIONIX99</p>
     </div>
+    <footer>CREATED BY CLAUDIONIX99</footer>
   </section>
 
 </main>
 
-<!-- MODAL AGGIUNGI MOVIMENTO -->
+<!-- MODALE AGGIUNGI/MODIFICA MOVIMENTO -->
 <div id="movimentoModal" class="modal">
   <div class="modal-content center-card">
     <h2 id="modalTitle">Aggiungi Movimento</h2>
     <label>Portafoglio:</label>
     <select id="movWallet"></select>
-    <label>Descrizione</label>
+    <label>Descrizione:</label>
     <input type="text" id="movDescrizione">
-    <label>Importo</label>
+    <label>Importo:</label>
     <input type="number" id="movImporto">
-    <label>Tipo</label>
+    <label>Tipo:</label>
     <select id="movTipo">
       <option value="entrata">Entrata</option>
       <option value="spesa">Spesa</option>
     </select>
-    <label>Categoria</label>
+    <label>Categoria:</label>
     <input type="text" id="movCategoria">
-    <label>Data</label>
+    <label>Data:</label>
     <input type="date" id="movData">
-    <label>Ricorrenza (mesi)</label>
+    <label>Ricorrenza (mesi, solo spese):</label>
     <input type="number" id="movRicorrenza" value="0">
     <div class="modal-buttons">
-      <button id="saveMovimentoBtn">Salva</button>
+      <button id="saveMovimentoBtn">Aggiungi</button>
       <button id="cancelMovimentoBtn">Annulla</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL AGGIUNGI PORTAFOGLIO -->
+<!-- MODALE AGGIUNGI PORTAFOGLIO -->
 <div id="walletModal" class="modal">
   <div class="modal-content center-card">
-    <h2>Nuovo Portafoglio</h2>
-    <label>Nome:</label>
+    <h2>Aggiungi Portafoglio</h2>
+    <label>Nome Portafoglio:</label>
     <input type="text" id="walletName">
     <label>Colore:</label>
     <input type="color" id="walletColor" value="#007bff">
     <div class="modal-buttons">
-      <button id="saveWalletBtn">Crea</button>
+      <button id="saveWalletBtn">Aggiungi</button>
       <button id="cancelWalletBtn">Annulla</button>
     </div>
   </div>
@@ -166,6 +168,5 @@
 <script src="storage.js"></script>
 <script src="app.js"></script>
 <script src="ui.js"></script>
-
 </body>
 </html>
