@@ -10,62 +10,74 @@
 <body>
 
 <header>
-  <h2>Portafoglio 2.0</h2>
-  <button id="darkToggle">🌙</button>
+  <b>Portafoglio 2.0</b>
+  <button id="darkToggle" class="ghost">🌙</button>
 </header>
 
 <main>
 
-<section id="menu" class="page active card">
-  <select id="walletSelect"></select>
-  <button onclick="addWallet()">➕ Portafoglio</button>
-  <button data-page="saldo">Saldo</button>
-  <button data-page="movimenti">Movimenti</button>
-  <button data-page="grafici">Grafici</button>
-  <button data-page="calendario">Calendario</button>
+<section id="home" class="page active">
+  <div class="card">
+    <h3>Saldo Totale</h3>
+    <h1 id="saldoTotale">€0</h1>
+  </div>
+
+  <div class="card">
+    <h3>Portafogli</h3>
+    <div id="walletList"></div>
+    <button class="secondary" onclick="addWallet()">➕ Portafoglio</button>
+  </div>
+
+  <div class="card">
+    <button data-page="movimenti">Movimenti</button>
+    <button data-page="grafici">Grafici</button>
+    <button data-page="calendario">Calendario</button>
+  </div>
 </section>
 
-<section id="saldo" class="page card">
-  <button class="homeBtn">🏠</button>
-  <h2 id="saldoVal">€0</h2>
-  <button onclick="openModal('entrata')">➕ Entrata</button>
-  <button onclick="openModal('spesa')">➖ Spesa</button>
+<section id="movimenti" class="page">
+  <button class="ghost homeBtn">🏠</button>
+  <div class="card">
+    <select id="walletFilter"></select>
+    <button onclick="openModal('entrata')">➕ Entrata</button>
+    <button onclick="openModal('spesa')" class="secondary">➖ Spesa</button>
+    <ul id="movimentiList"></ul>
+  </div>
 </section>
 
-<section id="movimenti" class="page card">
-  <button class="homeBtn">🏠</button>
-  <button onclick="exportCSV()">📤 CSV</button>
-  <ul id="movimentiList"></ul>
+<section id="grafici" class="page">
+  <button class="ghost homeBtn">🏠</button>
+  <div class="card">
+    <select id="walletChartSelect"></select>
+    <select id="periodSelect">
+      <option value="week">Settimanale</option>
+      <option value="month">Mensile</option>
+    </select>
+    <canvas id="graficoSaldo"></canvas>
+  </div>
 </section>
 
-<section id="grafici" class="page card">
-  <button class="homeBtn">🏠</button>
-  <select id="periodSelect">
-    <option value="week">Settimanale</option>
-    <option value="month">Mensile</option>
-  </select>
-  <canvas id="graficoSaldo"></canvas>
-</section>
-
-<section id="calendario" class="page card">
-  <button class="homeBtn">🏠</button>
-  <div id="calendarGrid"></div>
+<section id="calendario" class="page">
+  <button class="ghost homeBtn">🏠</button>
+  <div class="card">
+    <select id="walletCalendarSelect"></select>
+    <div id="calendar" class="calendar"></div>
+  </div>
 </section>
 
 </main>
 
 <div id="movimentoModal" class="modal">
-  <div class="modal-content">
+  <div class="card">
     <h3 id="modalTitle"></h3>
     <input id="movDescrizione" placeholder="Descrizione">
     <input id="movImporto" type="number" placeholder="Importo">
     <input id="movData" type="date">
     <select id="movWallet"></select>
-    <label>Ricorrenza (mesi)</label>
     <input id="movRicorrenza" type="number" value="0">
     <input type="hidden" id="movTipo">
-    <button id="saveMovimentoBtn">Salva</button>
-    <button onclick="closeModal()">Annulla</button>
+    <button onclick="saveMovimento()">Salva</button>
+    <button class="ghost" onclick="closeModal()">Annulla</button>
   </div>
 </div>
 
