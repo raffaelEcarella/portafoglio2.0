@@ -1,29 +1,41 @@
-// navigazione
-document.querySelectorAll("[data-page]").forEach(btn=>{
-  btn.onclick=()=>showPage(btn.dataset.page);
-});
-document.querySelectorAll(".homeBtn").forEach(btn=>{
-  btn.onclick=()=>showPage("menu");
-});
+// Navigazione
+document.querySelectorAll("[data-page]").forEach(b =>
+  b.onclick = () => showPage(b.dataset.page)
+);
+document.querySelectorAll(".homeBtn").forEach(b =>
+  b.onclick = () => showPage("menu")
+);
 
-function showPage(page){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  const s=document.getElementById(page);
-  if(s) s.classList.add("active");
-  if(page==="grafici") renderGrafici();
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
-// gestione dark mode
-document.getElementById("darkToggle").onclick = toggleDarkMode;
-document.getElementById("darkToggle2").onclick = toggleDarkMode;
-function toggleDarkMode(){
+// Modal
+addEntrataBtn.onclick = () => openModal("entrata");
+addSpesaBtn.onclick = () => openModal("spesa");
+
+function openModal(tipo) {
+  movimentoModal.style.display = "flex";
+  movTipo.value = tipo;
+  modalTitle.textContent = tipo === "entrata" ? "Aggiungi Entrata" : "Aggiungi Spesa";
+  movDescrizione.value = "";
+  movImporto.value = "";
+  movData.valueAsDate = new Date();
+
+  ricLabel.style.display = tipo === "spesa" ? "block" : "none";
+  movRicorrenza.style.display = tipo === "spesa" ? "block" : "none";
+}
+
+cancelMovimentoBtn.onclick = () =>
+  movimentoModal.style.display = "none";
+
+// Dark mode
+darkToggle.onclick = toggleDark;
+darkToggle2.onclick = toggleDark;
+
+function toggleDark() {
   document.body.classList.toggle("dark");
   appState.ui.darkMode = document.body.classList.contains("dark");
   saveState();
 }
-
-// gestione colori grafici
-document.getElementById("colorEntrate").onchange = e=>{appState.ui.chartColors.entrate=e.target.value; saveState(); renderGrafici();}
-document.getElementById("colorSpese").onchange = e=>{appState.ui.chartColors.spese=e.target.value; saveState(); renderGrafici();}
-document.getElementById("colorTraguardo").onchange = e=>{appState.ui.chartColors.traguardo=e.target.value; saveState(); renderGrafici();}
-document.getElementById("colorSaldo").onchange = e=>{appState.ui.chartColors.saldo=e.target.value; saveState(); renderGrafici();}
