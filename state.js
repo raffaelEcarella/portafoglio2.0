@@ -1,12 +1,12 @@
-// CC99 - state.js Portafoglio 2.0
+// CC99 - state.js Portafoglio 2.0 v0.95
 
 const appState = {
   finance: {
     wallets: [
-      // esempio portafoglio iniziale
       {id:1, name:"Conto Cumulativo", color:"#007bff", movimenti:[], includeInCharts:true}
     ],
-    traguardo: 1000 // obiettivo finanziario globale
+    traguardo: 1000,
+    maxWallets: 6
   },
   ui: {
     darkMode: false,
@@ -19,18 +19,13 @@ const appState = {
   }
 };
 
-// --- SALVATAGGIO E CARICAMENTO ---
+// Salvataggio e caricamento
 function saveState() {
   localStorage.setItem("portafoglio2_state", JSON.stringify(appState));
 }
 
 function loadState() {
   const data = localStorage.getItem("portafoglio2_state");
-  if(data){
-    Object.assign(appState, JSON.parse(data));
-  }
-  // applica dark mode se salvato
-  if(appState.ui.darkMode){
-    document.body.classList.add("dark");
-  }
+  if(data) Object.assign(appState, JSON.parse(data));
+  if(appState.ui.darkMode) document.body.classList.add("dark");
 }
