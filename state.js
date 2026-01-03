@@ -1,175 +1,33 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portafoglio 2.0 - Versione 0.95</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+// CC99 - state.js Portafoglio 2.0
+const appState = {
+  finance: {
+    wallets: [
+      {id:1, name:"Conto Cumulativo", color:"#007bff", movimenti:[], includeInCharts:true}
+    ],
+    traguardo: 1000
+  },
+  ui: {
+    darkMode: false,
+    chartColors: {
+      entrate: "#28a745",   // verde Italia
+      spese: "#b71c1c",     // rosso sangue piccione
+      traguardo: "#ffc107", // giallo
+      saldo: "#007bff"      // blu principale
+    }
+  }
+};
 
-<header>
-  <h1>Portafoglio 2.0</h1>
-  <button id="darkToggle">🌙</button>
-</header>
+// --- SALVATAGGIO E CARICAMENTO ---
+function saveState() {
+  localStorage.setItem("portafoglio2_state", JSON.stringify(appState));
+}
 
-<main class="main-container">
-
-  <!-- MENU PRINCIPALE -->
-  <section id="menu" class="page active center-page">
-    <div class="card center-card">
-      <h2>Menu</h2>
-      <button data-page="saldo">Saldo</button>
-      <button data-page="movimenti">Movimenti</button>
-      <button data-page="grafici">Grafici</button>
-      <button data-page="calendario">Calendario</button>
-      <button data-page="impostazioni">Impostazioni</button>
-    </div>
-  </section>
-
-  <!-- SALDO -->
-  <section id="saldo" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Saldo Totale</h3>
-      <div id="saldoVal">€0</div>
-      <div class="btn-row" style="width: 100%;">
-        <button id="addEntrataBtn" class="add-btn">Aggiungi Entrata</button>
-        <button id="addSpesaBtn" class="add-btn spesa">Aggiungi Spesa</button>
-        <button id="addWalletBtn" class="add-btn">Aggiungi Portafoglio</button>
-      </div>
-    </div>
-    <div id="walletsContainer" class="card center-card">
-      <h3>Portafogli</h3>
-      <ul id="walletsList" style="list-style:none; padding:0; width:100%;"></ul>
-    </div>
-  </section>
-
-  <!-- MOVIMENTI -->
-  <section id="movimenti" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Filtri Movimenti</h3>
-      <label>Portafoglio:</label>
-      <select id="filterWallet"></select>
-      <label>Categoria:</label>
-      <input type="text" id="filterCategoria">
-      <label>Da:</label>
-      <input type="date" id="filterDa">
-      <label>A:</label>
-      <input type="date" id="filterA">
-      <div class="btn-row">
-        <button id="applyFiltersBtn">Applica Filtri</button>
-        <button id="clearFiltersBtn">Pulisci Filtri</button>
-      </div>
-    </div>
-    <div class="card center-card">
-      <h3>Lista Movimenti</h3>
-      <ul id="movimentiList" style="list-style:none; padding:0; width:100%;"></ul>
-    </div>
-  </section>
-
-  <!-- GRAFICI -->
-  <section id="grafici" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Grafico Percentuali</h3>
-      <canvas id="graficoCategorie"></canvas>
-    </div>
-    <div class="card center-card">
-      <h3>Grafico Progressivo Saldo</h3>
-      <canvas id="graficoSaldo"></canvas>
-    </div>
-    <div class="card center-card">
-      <h3>Previsioni 15 Giorni</h3>
-      <ul id="previsioniList" style="list-style:none; padding:0; width:100%;"></ul>
-    </div>
-  </section>
-
-  <!-- CALENDARIO -->
-  <section id="calendario" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Calendario Movimenti</h3>
-      <label>Portafoglio:</label>
-      <select id="calendarioWallet"></select>
-      <label>Mese:</label>
-      <input type="month" id="calendarioMonth" value="">
-      <table id="calendarioTable">
-        <thead><tr><th>Data</th><th>Entrate</th><th>Spese</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- IMPOSTAZIONI -->
-  <section id="impostazioni" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
-    <div class="card center-card">
-      <h3>Impostazioni</h3>
-      <button id="darkToggle2">🌙 Dark Mode</button>
-      <label>Colore Entrate:</label>
-      <input type="color" id="colorEntrate" value="#28a745">
-      <label>Colore Spese:</label>
-      <input type="color" id="colorSpese" value="#b71c1c">
-      <label>Colore Traguardo:</label>
-      <input type="color" id="colorTraguardo" value="#ffc107">
-      <label>Colore Saldo:</label>
-      <input type="color" id="colorSaldo" value="#007bff">
-      <div class="settings-footer">CREATED BY CLAUDIONIX99</div>
-    </div>
-  </section>
-
-</main>
-
-<!-- MODAL AGGIUNGI/MODIFICA -->
-<div id="movimentoModal" class="modal">
-  <div class="modal-content center-card">
-    <h2 id="modalTitle">Aggiungi Movimento</h2>
-    <label>Portafoglio:</label>
-    <select id="movWallet"></select>
-    <label>Descrizione:</label>
-    <input type="text" id="movDescrizione">
-    <label>Importo:</label>
-    <input type="number" id="movImporto">
-    <label>Tipo:</label>
-    <select id="movTipo">
-      <option value="entrata">Entrata</option>
-      <option value="spesa">Spesa</option>
-    </select>
-    <label>Categoria:</label>
-    <input type="text" id="movCategoria">
-    <label>Data:</label>
-    <input type="date" id="movData">
-    <label>Ricorrenza (mesi, solo spese):</label>
-    <input type="number" id="movRicorrenza" value="0">
-    <div class="modal-buttons">
-      <button id="saveMovimentoBtn">Salva</button>
-      <button id="cancelMovimentoBtn">Annulla</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL AGGIUNGI PORTAFOGLIO -->
-<div id="walletModal" class="modal">
-  <div class="modal-content center-card">
-    <h2>Aggiungi Portafoglio</h2>
-    <label>Nome Portafoglio:</label>
-    <input type="text" id="walletName">
-    <label>Colore Portafoglio:</label>
-    <input type="color" id="walletColor" value="#007bff">
-    <div class="modal-buttons">
-      <button id="saveWalletBtn">Aggiungi</button>
-      <button id="cancelWalletBtn">Annulla</button>
-    </div>
-  </div>
-</div>
-
-<script src="state.js"></script>
-<script src="storage.js"></script>
-<script src="app.js"></script>
-<script src="ui.js"></script>
-</body>
-</html>
+function loadState() {
+  const data = localStorage.getItem("portafoglio2_state");
+  if(data){
+    Object.assign(appState, JSON.parse(data));
+  }
+  if(appState.ui.darkMode){
+    document.body.classList.add("dark");
+  }
+}
