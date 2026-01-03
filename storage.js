@@ -1,7 +1,8 @@
 function saveState() {
-  localStorage.setItem("pf2", JSON.stringify(appState));
+  localStorage.setItem("portafoglio2_state", JSON.stringify(appState));
 }
+
 function loadState() {
-  const d = localStorage.getItem("pf2");
-  if (d) Object.assign(appState, JSON.parse(d));
+  const data = localStorage.getItem("portafoglio2_state");
+  if (data) Object.assign(appState, JSON.parse(data));
 }
