@@ -21,7 +21,7 @@
   <section id="menu" class="page active center-page">
     <div class="card center-card">
       <h2>Menu</h2>
-      <button data-page="saldo">Saldo</button>
+      <button data-page="home">Home</button>
       <button data-page="movimenti">Movimenti</button>
       <button data-page="grafici">Grafici</button>
       <button data-page="calendario">Calendario</button>
@@ -29,21 +29,12 @@
     </div>
   </section>
 
-  <!-- SALDO -->
-  <section id="saldo" class="page center-page">
-    <button class="homeBtn">🏠 Home</button>
+  <!-- HOME CON PORTAFOGLI -->
+  <section id="home" class="page center-page">
     <div class="card center-card">
-      <h3>Saldo Cumulativo</h3>
-      <div id="saldoVal">€0</div>
-      <div class="btn-row">
-        <button id="addIncomeBtn">Aggiungi Entrata</button>
-        <button id="addExpenseBtn">Aggiungi Spesa</button>
-      </div>
-    </div>
-    <div class="card center-card">
-      <h3>Portafogli</h3>
-      <ul id="walletList"></ul>
-      <button id="addWalletBtn">Aggiungi Portafoglio</button>
+      <h2>Saldo Cumulativo</h2>
+      <div id="homeWallets"></div>
+      <button onclick="aggiungiWallet()">Aggiungi Portafoglio</button>
     </div>
   </section>
 
@@ -51,7 +42,7 @@
   <section id="movimenti" class="page center-page">
     <button class="homeBtn">🏠 Home</button>
     <div class="card center-card">
-      <h3>Filtri Movimenti</h3>
+      <h3>Filtra Movimenti</h3>
       <label>Portafoglio:</label>
       <select id="filterWallet"></select>
       <label>Categoria:</label>
@@ -68,6 +59,10 @@
     <div class="card center-card">
       <h3>Lista Movimenti</h3>
       <ul id="movimentiList"></ul>
+      <div class="btn-row">
+        <button onclick="aggiungiMovimentoPrompt('entrata')">Aggiungi Entrata</button>
+        <button onclick="aggiungiMovimentoPrompt('spesa')">Aggiungi Spesa</button>
+      </div>
     </div>
   </section>
 
@@ -75,11 +70,11 @@
   <section id="grafici" class="page center-page">
     <button class="homeBtn">🏠 Home</button>
     <div class="card center-card">
-      <h3>Grafico Percentuale Categorie</h3>
+      <h3>Grafico Categorie</h3>
       <canvas id="graficoCategorie"></canvas>
     </div>
     <div class="card center-card">
-      <h3>Grafico Saldo Progressivo</h3>
+      <h3>Saldo Progressivo</h3>
       <canvas id="graficoSaldo"></canvas>
     </div>
   </section>
@@ -90,9 +85,10 @@
     <div class="card center-card">
       <h3>Calendario Movimenti</h3>
       <label>Portafoglio:</label>
-      <select id="calendarWallet"></select>
+      <select id="calendarioWallet"></select>
       <label>Mese:</label>
-      <input type="month" id="calendarMonth">
+      <input type="month" id="calendarioMese" value="">
+      <button onclick="renderCalendario(document.getElementById('calendarioMese').value, parseInt(document.getElementById('calendarioWallet').value))">Aggiorna</button>
       <table id="calendarioTable">
         <thead><tr><th>Data</th><th>Entrate</th><th>Spese</th></tr></thead>
         <tbody></tbody>
@@ -109,48 +105,21 @@
       <label>Colore Entrate:</label>
       <input type="color" id="colorEntrate" value="#28a745">
       <label>Colore Spese:</label>
-      <input type="color" id="colorSpese" value="#dc3545">
+      <input type="color" id="colorSpese" value="#b71c1c">
       <label>Colore Traguardo:</label>
       <input type="color" id="colorTraguardo" value="#ffc107">
       <label>Colore Saldo:</label>
       <input type="color" id="colorSaldo" value="#007bff">
-      <div id="settingsFooter">CREATED BY CLAUDIONIX99</div>
+      <p style="text-align:center;margin-top:20px;">CREATED BY CLAUDIONIX99</p>
     </div>
   </section>
 
 </main>
 
-<!-- MODALE AGGIUNGI/MODIFICA MOVIMENTO -->
-<div id="movimentoModal" class="modal">
-  <div class="modal-content center-card">
-    <h2 id="modalTitle">Aggiungi Movimento</h2>
-    <label>Portafoglio:</label>
-    <select id="movWallet"></select>
-    <label>Descrizione:</label>
-    <input type="text" id="movDescrizione">
-    <label>Importo:</label>
-    <input type="number" id="movImporto">
-    <label>Tipo:</label>
-    <select id="movTipo">
-      <option value="entrata">Entrata</option>
-      <option value="spesa">Spesa</option>
-    </select>
-    <label>Categoria:</label>
-    <input type="text" id="movCategoria">
-    <label>Data:</label>
-    <input type="date" id="movData">
-    <label>Ricorrenza (mesi, solo spese):</label>
-    <input type="number" id="movRicorrenza" value="0">
-    <div class="modal-buttons">
-      <button id="saveMovimentoBtn">Aggiungi</button>
-      <button id="cancelMovimentoBtn">Annulla</button>
-    </div>
-  </div>
-</div>
-
 <script src="state.js"></script>
 <script src="storage.js"></script>
 <script src="app.js"></script>
 <script src="ui.js"></script>
+
 </body>
 </html>
