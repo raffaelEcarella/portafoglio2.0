@@ -5,8 +5,7 @@ const appState = {
     wallets: [
       {id:1, name:"Conto Cumulativo", color:"#007bff", movimenti:[], includeInCharts:true}
     ],
-    traguardo: 1000,
-    maxWallets: 6
+    traguardo: 1000
   },
   ui: {
     darkMode: false,
@@ -19,13 +18,29 @@ const appState = {
   }
 };
 
-// Salvataggio e caricamento
+// --- SALVATAGGIO E CARICAMENTO PROFONDO ---
 function saveState() {
   localStorage.setItem("portafoglio2_state", JSON.stringify(appState));
 }
 
 function loadState() {
   const data = localStorage.getItem("portafoglio2_state");
-  if(data) Object.assign(appState, JSON.parse(data));
-  if(appState.ui.darkMode) document.body.classList.add("dark");
+  if(data){
+    const parsed = JSON.parse(data);
+    mergeDeep(appState, parsed);
+  }
+  if(appState.ui.darkMode){
+    document.body.classList.add("dark");
+  }
+}
+
+// Merge profondo
+function mergeDeep(target, source){
+  for(const key in source){
+    if(source[key] instanceof Object && key in target){
+      mergeDeep(target[key], source[key]);
+    }else{
+      target[key] = source[key];
+    }
+  }
 }
