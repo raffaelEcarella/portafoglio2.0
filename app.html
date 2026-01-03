@@ -35,16 +35,15 @@
     <div class="card center-card">
       <h3>Saldo Cumulativo</h3>
       <div id="saldoVal">€0</div>
+      <div class="btn-row">
+        <button id="addIncomeBtn">Aggiungi Entrata</button>
+        <button id="addExpenseBtn">Aggiungi Spesa</button>
+      </div>
     </div>
     <div class="card center-card">
       <h3>Portafogli</h3>
       <ul id="walletList"></ul>
       <button id="addWalletBtn">Aggiungi Portafoglio</button>
-    </div>
-    <div class="card center-card">
-      <h3>Aggiungi Movimento</h3>
-      <button id="addIncomeBtn">Aggiungi Entrata</button>
-      <button id="addExpenseBtn">Aggiungi Spesa</button>
     </div>
   </section>
 
@@ -76,12 +75,11 @@
   <section id="grafici" class="page center-page">
     <button class="homeBtn">🏠 Home</button>
     <div class="card center-card">
-      <h3>Percentuale per Categoria</h3>
+      <h3>Grafico Percentuale Categorie</h3>
       <canvas id="graficoCategorie"></canvas>
-      <label><input type="checkbox" class="walletCheckbox" checked value="all"> Mostra Tutti</label>
     </div>
     <div class="card center-card">
-      <h3>Saldo Progressivo</h3>
+      <h3>Grafico Saldo Progressivo</h3>
       <canvas id="graficoSaldo"></canvas>
     </div>
   </section>
@@ -109,20 +107,20 @@
       <h3>Impostazioni</h3>
       <button id="darkToggle2">🌙 Dark Mode</button>
       <label>Colore Entrate:</label>
-      <input type="color" id="colorEntrate" value="#009246">
+      <input type="color" id="colorEntrate" value="#28a745">
       <label>Colore Spese:</label>
-      <input type="color" id="colorSpese" value="#CE2B37">
+      <input type="color" id="colorSpese" value="#dc3545">
       <label>Colore Traguardo:</label>
-      <input type="color" id="colorTraguardo" value="#FFC107">
+      <input type="color" id="colorTraguardo" value="#ffc107">
       <label>Colore Saldo:</label>
       <input type="color" id="colorSaldo" value="#007bff">
-      <p style="text-align:center; margin-top:20px;">CREATED BY CLAUDIONIX99</p>
+      <div id="settingsFooter">CREATED BY CLAUDIONIX99</div>
     </div>
   </section>
 
 </main>
 
-<!-- MODAL AGGIUNGI/MODIFICA -->
+<!-- MODALE AGGIUNGI/MODIFICA MOVIMENTO -->
 <div id="movimentoModal" class="modal">
   <div class="modal-content center-card">
     <h2 id="modalTitle">Aggiungi Movimento</h2>
@@ -141,7 +139,7 @@
     <input type="text" id="movCategoria">
     <label>Data:</label>
     <input type="date" id="movData">
-    <label>Ricorrenza (mesi):</label>
+    <label>Ricorrenza (mesi, solo spese):</label>
     <input type="number" id="movRicorrenza" value="0">
     <div class="modal-buttons">
       <button id="saveMovimentoBtn">Aggiungi</button>
