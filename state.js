@@ -5,6 +5,7 @@ const appState = {
       nome: "Totale",
       colore: "#1e40af",
       includeCharts: true,
+      traguardo: 1000,
       movimenti: []
     }
   ],
