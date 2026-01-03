@@ -4,102 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portafoglio 2.0</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <header>
-  <h1>Portafoglio 2.0</h1>
+  <h2>Portafoglio 2.0</h2>
   <button id="darkToggle">🌙</button>
 </header>
 
-<main class="main-container">
+<main>
 
-<section id="menu" class="page active center-page">
-  <div class="card center-card">
-    <h2>Menu</h2>
-    <button data-page="saldo">Saldo</button>
-    <button data-page="movimenti">Movimenti</button>
-    <button data-page="grafici">Grafici</button>
-    <button data-page="calendario">Calendario</button>
-    <button data-page="impostazioni">Impostazioni</button>
-  </div>
+<section id="menu" class="page active card">
+  <select id="walletSelect"></select>
+  <button onclick="addWallet()">➕ Portafoglio</button>
+  <button data-page="saldo">Saldo</button>
+  <button data-page="movimenti">Movimenti</button>
+  <button data-page="grafici">Grafici</button>
+  <button data-page="calendario">Calendario</button>
 </section>
 
-<section id="saldo" class="page center-page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card center-card">
-    <h3>Saldo attuale</h3>
-    <div id="saldoVal">€0</div>
-    <button id="addEntrataBtn">➕ Aggiungi Entrata</button>
-    <button id="addSpesaBtn">➖ Aggiungi Spesa</button>
-  </div>
+<section id="saldo" class="page card">
+  <button class="homeBtn">🏠</button>
+  <h2 id="saldoVal">€0</h2>
+  <button onclick="openModal('entrata')">➕ Entrata</button>
+  <button onclick="openModal('spesa')">➖ Spesa</button>
 </section>
 
-<section id="movimenti" class="page center-page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card center-card">
-    <h3>Lista Movimenti</h3>
-    <ul id="movimentiList"></ul>
-  </div>
+<section id="movimenti" class="page card">
+  <button class="homeBtn">🏠</button>
+  <button onclick="exportCSV()">📤 CSV</button>
+  <ul id="movimentiList"></ul>
 </section>
 
-<section id="grafici" class="page center-page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card center-card">
-    <h3>Grafico Categorie</h3>
-    <canvas id="graficoCategorie"></canvas>
-  </div>
+<section id="grafici" class="page card">
+  <button class="homeBtn">🏠</button>
+  <select id="periodSelect">
+    <option value="week">Settimanale</option>
+    <option value="month">Mensile</option>
+  </select>
+  <canvas id="graficoSaldo"></canvas>
 </section>
 
-<section id="calendario" class="page center-page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card center-card">
-    <h3>Calendario</h3>
-    <table>
-      <thead>
-        <tr><th>Data</th><th>Importo</th></tr>
-      </thead>
-      <tbody id="calendarioBody"></tbody>
-    </table>
-  </div>
-</section>
-
-<section id="impostazioni" class="page center-page">
-  <button class="homeBtn">🏠 Home</button>
-  <div class="card center-card">
-    <h3>Impostazioni</h3>
-    <button id="darkToggle2">🌙 Dark Mode</button>
-  </div>
+<section id="calendario" class="page card">
+  <button class="homeBtn">🏠</button>
+  <div id="calendarGrid"></div>
 </section>
 
 </main>
 
-<!-- MODAL -->
 <div id="movimentoModal" class="modal">
   <div class="modal-content">
-    <h2 id="modalTitle"></h2>
-
-    <label>Descrizione</label>
-    <input id="movDescrizione" type="text">
-
-    <label>Importo</label>
-    <input id="movImporto" type="number">
-
-    <label>Data</label>
+    <h3 id="modalTitle"></h3>
+    <input id="movDescrizione" placeholder="Descrizione">
+    <input id="movImporto" type="number" placeholder="Importo">
     <input id="movData" type="date">
-
-    <label id="ricLabel">Ricorrenza (mesi)</label>
+    <select id="movWallet"></select>
+    <label>Ricorrenza (mesi)</label>
     <input id="movRicorrenza" type="number" value="0">
-
     <input type="hidden" id="movTipo">
-
-    <div class="modal-buttons">
-      <button id="saveMovimentoBtn">Salva</button>
-      <button id="cancelMovimentoBtn">Annulla</button>
-    </div>
+    <button id="saveMovimentoBtn">Salva</button>
+    <button onclick="closeModal()">Annulla</button>
   </div>
 </div>
 
