@@ -10,59 +10,101 @@
 <body>
 
 <header>
-  <b>Portafoglio 2.0</b>
+  <h1>Portafoglio 2.0</h1>
   <button id="darkToggle" class="ghost">🌙</button>
 </header>
 
 <main>
 
-<section id="home" class="page active">
-  <div class="card">
+<!-- HOME -->
+<section id="home" class="page active center-page">
+  <div class="card center-card">
     <h3>Saldo totale ad oggi</h3>
     <h1 id="saldoTotale">€0</h1>
     <small id="oggiLabel"></small>
   </div>
 
-  <div class="card">
+  <div class="card center-card">
     <h3>Portafogli</h3>
     <div id="walletList"></div>
     <button class="secondary" onclick="addWallet()">➕ Portafoglio</button>
   </div>
 
-  <div class="card">
-    <button data-page="movimenti">Movimenti</button>
-    <button data-page="grafici">Grafici</button>
-    <button data-page="calendario">Calendario</button>
+  <div class="card center-card">
+    <button onclick="showPage('movimenti')">Movimenti</button>
+    <button onclick="showPage('grafici')">Grafici</button>
+    <button onclick="showPage('calendario')">Calendario</button>
   </div>
 </section>
 
-<section id="grafici" class="page">
-  <button class="ghost homeBtn">🏠</button>
+<!-- MOVIMENTI -->
+<section id="movimenti" class="page center-page">
+  <button class="ghost homeBtn">🏠 Home</button>
+  <div class="card center-card">
+    <h3>Nuovo Movimento</h3>
+    <button onclick="openModal('entrata')">➕ Aggiungi Entrata</button>
+    <button onclick="openModal('spesa')">➕ Aggiungi Spesa</button>
+  </div>
+  <div class="card center-card">
+    <h3>Lista Movimenti</h3>
+    <ul id="movimentiList"></ul>
+  </div>
+</section>
 
-  <div class="card">
-    <select id="walletChartSelect"></select>
+<!-- GRAFICI -->
+<section id="grafici" class="page center-page">
+  <button class="ghost homeBtn">🏠 Home</button>
+
+  <div class="card center-card">
+    <h3>Seleziona portafogli da visualizzare</h3>
+    <div id="walletCheckboxes"></div>
     <canvas id="graficoPercentuali"></canvas>
   </div>
 
-  <div class="card">
+  <div class="card center-card">
     <canvas id="graficoProgressivo"></canvas>
   </div>
 </section>
 
-<section id="calendario" class="page">
-  <button class="ghost homeBtn">🏠</button>
-  <div class="card">
+<!-- CALENDARIO -->
+<section id="calendario" class="page center-page">
+  <button class="ghost homeBtn">🏠 Home</button>
+  <div class="card center-card">
     <select id="walletCalendarSelect"></select>
     <input type="month" id="calendarMonth">
     <div id="calendar" class="calendar"></div>
   </div>
 </section>
 
-</main>
+<!-- MODAL AGGIUNGI/MODIFICA -->
+<div id="movimentoModal" class="modal">
+  <div class="modal-content center-card">
+    <h2 id="modalTitle">Aggiungi Movimento</h2>
+    <label>Portafoglio</label>
+    <select id="movWallet"></select>
+    <label>Descrizione</label>
+    <input type="text" id="movDescrizione">
+    <label>Importo</label>
+    <input type="number" id="movImporto">
+    <label>Tipo</label>
+    <select id="movTipo">
+      <option value="entrata">Entrata</option>
+      <option value="spesa">Spesa</option>
+    </select>
+    <label>Data</label>
+    <input type="date" id="movData" value="">
+    <label>Ricorrenza (mesi, solo spesa)</label>
+    <input type="number" id="movRicorrenza" value="0" min="0">
+    <div class="modal-buttons">
+      <button id="saveMovimentoBtn">Aggiungi</button>
+      <button id="cancelMovimentoBtn">Annulla</button>
+    </div>
+  </div>
+</div>
 
 <script src="state.js"></script>
 <script src="storage.js"></script>
-<script src="app.js"></script>
 <script src="ui.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
