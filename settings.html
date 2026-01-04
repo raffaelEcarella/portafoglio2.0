@@ -1,9 +1,43 @@
-<section id="impostazioni" class="page">
-  <div class="wallet-card">
-    <h3>Impostazioni</h3>
-    <label>Dark Mode:</label>
-    <button id="darkToggle">🌙 Toggle Dark Mode</button>
-    <div id="walletSettings"></div>
-    <div class="settings-footer">CREATED BY CLAUDIONIX99</div>
-  </div>
-</section>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impostazioni - Finanze 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Impostazioni</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="movements.html">Movimenti</a>
+    <a href="charts.html">Grafici</a>
+    <a href="settings.html" class="active">Impostazioni</a>
+  </nav>
+</header>
+
+<main>
+  <section class="settings-section">
+    <h2>Preferenze</h2>
+    <label>
+      <input type="checkbox" id="darkModeToggle"> Modalità scura
+    </label>
+  </section>
+</main>
+
+<script src="storage.js"></script>
+<script src="state.js"></script>
+<script src="app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('darkModeToggle');
+  toggle.checked = state.darkMode;
+  toggle.addEventListener('change', () => {
+    state.darkMode = toggle.checked;
+    app.applyDarkMode();
+  });
+});
+</script>
+</body>
+</html>
