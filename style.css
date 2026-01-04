@@ -1,198 +1,42 @@
-/* ===== FONT & RESET ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* RESET BASE */
+* {margin:0;padding:0;box-sizing:border-box;font-family: 'Inter', sans-serif;}
+body {background-color:#f5f7fa;color:#1a1a1a;}
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-}
+/* TOP BAR */
+.topbar {background: linear-gradient(90deg,#0d3b66,#3f88c5);color:white;padding:1rem;text-align:center;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
 
-body {
-  background-color: #f5f7fa;
-  color: #1f2937;
-  line-height: 1.6;
-}
+/* MAIN CONTAINER */
+.main-container {padding:1rem;display:flex;flex-direction:column;gap:1rem;}
 
-/* ===== PALETTE ===== */
-:root {
-  --primary-blue: #1E3A8A;
-  --secondary-green: #10B981;
-  --gray-dark: #374151;
-  --gray-light: #6B7280;
-  --bg-light: #ffffff;
-  --bg-modal: rgba(0,0,0,0.4);
-}
+/* WALLETS GRID */
+.wallets-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;}
+.wallet-card {background:#fff;border-radius:12px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.15);transition:all 0.3s;}
+.wallet-card.cumulative {background: linear-gradient(90deg,#2a9d8f,#264653);color:white;text-align:center;}
 
-/* ===== CONTAINER ===== */
-.container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 1rem;
-}
+/* BOTTONI */
+button {padding:0.5rem 1rem;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s;}
+button:hover {opacity:0.9;}
+.btn-row {display:flex;gap:0.5rem;margin-top:0.5rem;}
 
-/* ===== HEADER ===== */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-}
+/* MODALE */
+.modal {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:1000;}
+.modal-content {background:white;padding:1rem;border-radius:12px;width:90%;max-width:400px;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:flex;flex-direction:column;gap:0.5rem;}
+.modal-buttons {display:flex;justify-content:space-between;margin-top:1rem;}
 
-header h1 {
-  color: var(--primary-blue);
-  font-weight: 700;
-}
+/* TOOLBAR */
+.toolbar {position:fixed;bottom:0;width:100%;display:flex;justify-content:space-around;background:#fff;padding:0.5rem 0;box-shadow:0 -2px 6px rgba(0,0,0,0.15);}
+.toolbar button {background:linear-gradient(90deg,#3f88c5,#0d3b66);color:white;}
 
-/* ===== TOOLBAR BUTTONS ===== */
-.toolbar button {
-  background-color: var(--primary-blue);
-  color: #fff;
-  border: none;
-  padding: 0.6rem 1rem;
-  margin: 0 0.3rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-weight: 500;
-}
+/* FILTRI */
+.filters {display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.5rem;}
+.filters label {font-weight:600;}
 
-.toolbar button:hover {
-  background-color: var(--secondary-green);
-}
+/* TABELLE */
+table {width:100%;border-collapse:collapse;margin-top:0.5rem;}
+table th, table td {border:1px solid #ddd;padding:0.5rem;text-align:center;border-radius:6px;}
 
-/* ===== PAGE SECTIONS ===== */
-.page {
-  display: none;
-  margin-top: 2rem;
-}
-
-.page.active {
-  display: block;
-}
-
-/* ===== CARDS ===== */
-.wallet-card, .movement-card {
-  background-color: var(--bg-light);
-  padding: 1rem 1.5rem;
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.wallet-card:hover, .movement-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-/* ===== BUTTONS ===== */
-button {
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  padding: 0.6rem 1rem;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-button.add-btn {
-  background-color: var(--secondary-green);
-  color: #fff;
-}
-
-button.add-btn:hover {
-  background-color: #059669;
-}
-
-/* ===== MODALI ===== */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-color: var(--bg-modal);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: var(--bg-light);
-  padding: 2rem;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-}
-
-.modal-content h2 {
-  color: var(--primary-blue);
-  margin-bottom: 1rem;
-}
-
-/* ===== INPUTS ===== */
-input, select {
-  width: 100%;
-  padding: 0.6rem 1rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--gray-light);
-  font-size: 1rem;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 2px rgba(30,58,138,0.2);
-}
-
-/* ===== CHARTS ===== */
-canvas {
-  margin-top: 2rem;
-  background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-}
-
-/* ===== DARK MODE ===== */
-body.dark {
-  background-color: #1f2937;
-  color: #e5e7eb;
-}
-
-body.dark .wallet-card,
-body.dark .movement-card,
-body.dark .modal-content,
-body.dark canvas {
-  background-color: #374151;
-  color: #e5e7eb;
-}
-
-body.dark input, body.dark select {
-  background-color: #4b5563;
-  border-color: #6b7280;
-  color: #e5e7eb;
-}
-
-body.dark .toolbar button {
-  background-color: #2563eb;
-}
-
-body.dark .toolbar button:hover {
-  background-color: #10b981;
-}
-
-body.dark button.add-btn {
-  background-color: #10b981;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .wallet-card, .movement-card {
-    padding: 0.8rem 1rem;
-  }
-  header h1 {
-    font-size: 1.5rem;
-  }
-}
+/* DARK MODE */
+body.dark {background:#1a1a1a;color:white;}
+body.dark .wallet-card {background:#2a2a2a;color:white;}
+body.dark .toolbar {background:#222;}
+body.dark button {color:white;}
