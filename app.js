@@ -1,4 +1,4 @@
-// CC99 - app.js
+// CC99 - app.js Portafoglio 2.0
 loadState();
 
 // --- UTILITY ---
@@ -17,8 +17,7 @@ function updateSaldi(){
   document.getElementById("saldoVal").textContent = `€${cumulative.toFixed(2)}`;
   saveState();
   renderWallets();
-  renderGrafici();
-  renderTraguardi();
+  renderCharts(); // usa chart.js
 }
 
 // --- RENDER WALLETS ---
@@ -59,7 +58,6 @@ document.getElementById("saveMovimentoBtn").onclick = ()=>{
   const descrizione = document.getElementById("movDescrizione").value;
   const importo = parseFloat(document.getElementById("movImporto").value);
   const tipo = document.getElementById("movTipo").value;
-  const categoria = document.getElementById("movCategoria").value || "Generale";
   const data = document.getElementById("movData").value;
   const ricorrenza = parseInt(document.getElementById("movRicorrenza").value) || 0;
 
@@ -73,7 +71,6 @@ document.getElementById("saveMovimentoBtn").onclick = ()=>{
       descrizione,
       importo,
       tipo,
-      categoria,
       data: d.toISOString().split('T')[0]
     });
   }
@@ -87,7 +84,6 @@ function closeMovimentoModal(){
   document.getElementById("movimentoModal").style.display="none";
   document.getElementById("movDescrizione").value="";
   document.getElementById("movImporto").value="";
-  document.getElementById("movCategoria").value="";
   document.getElementById("movRicorrenza").value=0;
 }
 
@@ -96,7 +92,7 @@ document.getElementById("addWalletBtn").onclick = ()=>{
   if(appState.finance.wallets.length>=6) return alert("Massimo 6 portafogli");
   const name = prompt("Nome nuovo portafoglio:");
   if(!name) return;
-  const color = prompt("Colore (hex) per il portafoglio:", "#007bff");
+  const color = prompt("Colore (hex) per il portafoglio:", "#0d47a1"); // blu default
   const newWallet = {
     id: Date.now(),
     name,
@@ -109,7 +105,6 @@ document.getElementById("addWalletBtn").onclick = ()=>{
   renderWallets();
   populateWalletSelect();
   populateWalletFilter();
-  populateCategoriaFilter();
 };
 
 // --- FILTRI ---
@@ -127,50 +122,6 @@ function populateWalletFilter(){
   });
 }
 
-function populateCategoriaFilter(){
-  const sel = document.getElementById("filterCategoriaMovimenti");
-  sel.innerHTML = "<option value=''>Tutte</option>";
-  const categorie = new Set();
-  appState.finance.wallets.forEach(w=>{
-    w.movimenti.forEach(m=>categorie.add(m.categoria));
-  });
-  categorie.forEach(c=>{
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
-    sel.appendChild(opt);
-  });
-}
-
-// --- CALENDARIO ---
-function renderCalendario(filterWallet, da, a){
-  const tbody = document.querySelector("#calendarioTable tbody");
-  tbody.innerHTML="";
-  let movimenti = appState.finance.wallets.flatMap(w=>w.movimenti.map(m=>({...m,wallet:w.name})));
-  if(filterWallet) movimenti = movimenti.filter(m=>m.wallet==filterWallet);
-  if(da) movimenti = movimenti.filter(m=>new Date(m.data)>=new Date(da));
-  if(a) movimenti = movimenti.filter(m=>new Date(m.data)<=new Date(a));
-  movimenti.sort((x,y)=>new Date(x.data)-new Date(y.data));
-
-  movimenti.forEach(m=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${m.data}</td><td>${m.tipo==='entrata'?m.importo:"-"}</td><td>${m.tipo==='spesa'?m.importo:"-"}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-// --- TRAGUARDI ---
-function renderTraguardi(){
-  const container = document.getElementById("traguardiList");
-  container.innerHTML = "";
-  if(!appState.finance.traguardo) return;
-  const cumulative = appState.finance.wallets.reduce((acc,w)=>acc + w.saldo,0);
-  const li = document.createElement("li");
-  li.textContent = `Traguardo: €${appState.finance.traguardo} | Saldo attuale: €${cumulative.toFixed(2)} | ${((cumulative/appState.finance.traguardo)*100).toFixed(1)}% completato`;
-  container.appendChild(li);
-}
-
 // --- INIT ---
 updateSaldi();
 populateWalletFilter();
-populateCategoriaFilter();
