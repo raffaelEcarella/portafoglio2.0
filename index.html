@@ -1,20 +1,65 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portafoglio 2.0</title>
-<link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafoglio 2.0</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<!-- Redireziona subito a app.html -->
-<script>
-  window.location.href = "app.html";
-</script>
+<header class="topbar">
+  <h1>Portafoglio 2.0</h1>
+</header>
 
+<main class="main-container">
+
+  <!-- HOME -->
+  <section id="home" class="page active">
+    <div id="walletsContainer"></div>
+    <div class="wallet-card cumulative">
+      <h3>Saldo Cumulativo</h3>
+      <div id="saldoVal">€0.00</div>
+      <button id="addWalletBtn">+ Aggiungi Portafoglio</button>
+    </div>
+  </section>
+
+  <!-- GRAFICI -->
+  <section id="grafici" class="page">
+    <div class="wallet-card">
+      <h3>Grafico Categorie</h3>
+      <canvas id="graficoCategorie"></canvas>
+    </div>
+    <div class="wallet-card">
+      <h3>Saldo Progressivo</h3>
+      <canvas id="graficoSaldo"></canvas>
+    </div>
+  </section>
+
+  <!-- IMPOSTAZIONI -->
+  <section id="impostazioni" class="page">
+    <div class="wallet-card">
+      <h3>Impostazioni</h3>
+      <button id="darkToggle">🌙 Toggle Dark Mode</button>
+    </div>
+  </section>
+
+</main>
+
+<div class="toolbar">
+  <button data-page="home">Home</button>
+  <button data-page="grafici">Grafici</button>
+  <button data-page="impostazioni">Impostazioni</button>
+</div>
+
+<script src="state.js"></script>
+<script src="storage.js"></script>
+<script src="app.js"></script>
+<script src="ui.js"></script>
 </body>
 </html>
