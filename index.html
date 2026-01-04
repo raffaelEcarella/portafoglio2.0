@@ -1,35 +1,92 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portafoglio 2.0</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Friendly App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="chart.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Bank Friendly App</h1>
+        <nav>
+            <button id="nav-home">Home</button>
+            <button id="nav-movimenti">Movimenti</button>
+            <button id="nav-grafici">Grafici</button>
+            <button id="nav-impostazioni">Impostazioni</button>
+        </nav>
+    </header>
 
-<header class="topbar">
-  <h1>Portafoglio 2.0</h1>
-</header>
+    <main>
+        <!-- HOME -->
+        <section id="page-home" class="page active">
+            <h2>Benvenuto!</h2>
+            <p>Controlla il tuo saldo e i tuoi movimenti recenti.</p>
+        </section>
 
-<nav class="navbar">
-  <button data-page="home">Home</button>
-  <button data-page="movimenti">Movimenti</button>
-  <button data-page="grafici">Grafici</button>
-  <button data-page="impostazioni">Impostazioni</button>
-</nav>
+        <!-- MOVIMENTI -->
+        <section id="page-movimenti" class="page">
+            <h2>Movimenti</h2>
+            <button id="btn-add-movimento">Aggiungi Movimento</button>
+            <table id="movimenti-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descrizione</th>
+                        <th>Tipo</th>
+                        <th>Importo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Movimenti verranno inseriti qui -->
+                </tbody>
+            </table>
+        </section>
 
-<main id="app">
-  <!-- Le sezioni saranno caricate dinamicamente -->
-</main>
+        <!-- GRAFICI -->
+        <section id="page-grafici" class="page">
+            <h2>Grafici</h2>
+            <canvas id="graficoMovimenti"></canvas>
+        </section>
 
-<script src="state.js"></script>
-<script src="storage.js"></script>
-<script src="chart.js"></script>
-<script src="ui.js"></script>
-<script src="app.js"></script>
+        <!-- IMPOSTAZIONI -->
+        <section id="page-impostazioni" class="page">
+            <h2>Impostazioni</h2>
+            <label>
+                Modalità scura
+                <input type="checkbox" id="toggle-darkmode">
+            </label>
+        </section>
+    </main>
 
+    <!-- MODALE AGGIUNGI MOVIMENTO -->
+    <div id="modal-movimento" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Nuovo Movimento</h3>
+            <form id="form-movimento">
+                <label>Descrizione:
+                    <input type="text" id="movimento-desc" required>
+                </label>
+                <label>Importo:
+                    <input type="number" id="movimento-importo" required>
+                </label>
+                <label>Tipo:
+                    <select id="movimento-tipo">
+                        <option value="entrata">Entrata</option>
+                        <option value="spesa">Spesa</option>
+                    </select>
+                </label>
+                <button type="submit">Salva</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="state.js"></script>
+    <script src="storage.js"></script>
+    <script src="ui.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
