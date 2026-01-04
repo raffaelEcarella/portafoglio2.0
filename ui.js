@@ -1,82 +1,38 @@
-// ui.js
-import { getState } from './state.js';
-import Chart from 'chart.js/auto';
+// CC99 - ui.js
 
-const state = getState();
+// --- NAVIGAZIONE ---
+const pages = document.querySelectorAll(".page");
+const toolbarBtns = document.querySelectorAll(".toolbar button");
+toolbarBtns.forEach(btn=>{
+  btn.onclick=()=>{
+    const target = btn.dataset.page;
+    pages.forEach(p=>p.classList.remove("active"));
+    document.getElementById(target).classList.add("active");
+  };
+});
 
-let graficoCategorie;
-let graficoSaldo;
+// --- DARK MODE ---
+const darkToggle = document.getElementById("darkToggle");
+darkToggle.onclick = () => {
+  document.body.classList.toggle("dark");
+  appState.darkMode = document.body.classList.contains("dark");
+  saveState();
+};
 
-export function renderWallets() {
-  const container = document.getElementById('walletsContainer');
-  container.innerHTML = '';
-  state.wallets.forEach(w => {
-    const div = document.createElement('div');
-    div.classList.add('wallet-card');
-    div.innerHTML = `<strong>${w.name}</strong><br>Saldo: €${w.balance.toFixed(2)}`;
-    container.appendChild(div);
+// --- POPOLAMENTO IMPOSTAZIONI ---
+function renderSettings(){
+  const div = document.getElementById("walletSettings");
+  div.innerHTML="";
+  appState.finance.wallets.forEach(w=>{
+    const container = document.createElement("div");
+    container.innerHTML = `<strong>${w.name}</strong> - Mostra nei grafici: <input type="checkbox" ${w.includeInCharts?"checked":""} data-id="${w.id}">`;
+    div.appendChild(container);
+    container.querySelector("input").onchange = (e)=>{
+      const wal = getWalletById(parseInt(e.target.dataset.id));
+      wal.includeInCharts = e.target.checked;
+      saveState();
+      renderCharts();
+    };
   });
 }
-
-export function renderMovements() {
-  const container = document.getElementById('movementsContainer');
-  container.innerHTML = '';
-  state.movements.forEach(m => {
-    const div = document.createElement('div');
-    div.classList.add('movement-card');
-    div.innerHTML = `
-      ${m.date} - <strong>${m.category}</strong> (${m.type === 'income' ? 'Entrata' : 'Spesa'}) : €${m.amount.toFixed(2)} 
-      <em>Wallet: ${m.wallet}</em>`;
-    container.appendChild(div);
-  });
-}
-
-export function populateWalletSelect() {
-  const select = document.getElementById('movementWallet');
-  select.innerHTML = '';
-  state.wallets.forEach(w => {
-    const opt = document.createElement('option');
-    opt.value = w.name;
-    opt.textContent = w.name;
-    select.appendChild(opt);
-  });
-}
-
-export function renderCharts() {
-  const categorie = {};
-  state.movements.forEach(m => {
-    if (!categorie[m.category]) categorie[m.category] = 0;
-    categorie[m.category] += (m.type === 'income' ? m.amount : -m.amount);
-  });
-
-  // --- GRAFICO CATEGORIE ---
-  const ctx1 = document.getElementById('graficoCategorie').getContext('2d');
-  if (graficoCategorie) graficoCategorie.destroy();
-  graficoCategorie = new Chart(ctx1, {
-    type: 'doughnut',
-    data: {
-      labels: Object.keys(categorie),
-      datasets: [{
-        data: Object.values(categorie),
-        backgroundColor: ['#1E3A8A', '#10B981', '#6B7280', '#3B82F6', '#34D399']
-      }]
-    },
-    options: { responsive: true }
-  });
-
-  // --- GRAFICO SALDO WALLET ---
-  const ctx2 = document.getElementById('graficoSaldo').getContext('2d');
-  if (graficoSaldo) graficoSaldo.destroy();
-  graficoSaldo = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-      labels: state.wallets.map(w => w.name),
-      datasets: [{
-        label: 'Saldo Wallet',
-        data: state.wallets.map(w => w.balance),
-        backgroundColor: '#3B82F6'
-      }]
-    },
-    options: { responsive: true }
-  });
-}
+renderSettings();
