@@ -33,19 +33,31 @@ document.getElementById('cancelMovementBtn').addEventListener('click', () => {
 });
 
 document.getElementById('saveMovementBtn').addEventListener('click', () => {
-  const wallet = document.getElementById('movementWallet').value;
-  const type = document.getElementById('movementType').value;
+  const walletName = document.getElementById('movementWallet').value;
+  const type = document.getElementById('movementType').value; // income / expense
   const category = document.getElementById('movementCategory').value;
   const amount = parseFloat(document.getElementById('movementAmount').value);
   const date = document.getElementById('movementDate').value;
 
-  if (!wallet || !category || !amount || !date) return alert('Compila tutti i campi');
+  if (!walletName || !category || !amount || !date) {
+    return alert('Compila tutti i campi');
+  }
 
-  state.movements.push({ wallet, type, category, amount, date });
+  // --- AGGIUNGI MOVIMENTO ---
+  state.movements.push({ wallet: walletName, type, category, amount, date });
+
+  // --- AGGIORNA SALDO WALLET ---
+  const wallet = state.wallets.find(w => w.name === walletName);
+  if (wallet) {
+    if (type === 'income') wallet.balance += amount;
+    else if (type === 'expense') wallet.balance -= amount;
+  }
+
   setState(state);
   saveData();
 
   renderMovements();
+  renderWallets();
   renderCharts();
   document.getElementById('modalMovement').style.display = 'none';
 });
