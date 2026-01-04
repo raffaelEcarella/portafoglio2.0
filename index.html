@@ -1,92 +1,36 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Friendly App</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <script src="chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home - Finanze 2026</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Bank Friendly App</h1>
-        <nav>
-            <button id="nav-home">Home</button>
-            <button id="nav-movimenti">Movimenti</button>
-            <button id="nav-grafici">Grafici</button>
-            <button id="nav-impostazioni">Impostazioni</button>
-        </nav>
-    </header>
+<header>
+  <h1>Finanze 2026</h1>
+  <nav>
+    <a href="index.html" class="active">Home</a>
+    <a href="movements.html">Movimenti</a>
+    <a href="charts.html">Grafici</a>
+    <a href="settings.html">Impostazioni</a>
+  </nav>
+</header>
 
-    <main>
-        <!-- HOME -->
-        <section id="page-home" class="page active">
-            <h2>Benvenuto!</h2>
-            <p>Controlla il tuo saldo e i tuoi movimenti recenti.</p>
-        </section>
+<main>
+  <section class="saldo-section">
+    <h2>Saldo attuale</h2>
+    <p id="saldoDisplay">€0,00</p>
+  </section>
+</main>
 
-        <!-- MOVIMENTI -->
-        <section id="page-movimenti" class="page">
-            <h2>Movimenti</h2>
-            <button id="btn-add-movimento">Aggiungi Movimento</button>
-            <table id="movimenti-table">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Descrizione</th>
-                        <th>Tipo</th>
-                        <th>Importo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Movimenti verranno inseriti qui -->
-                </tbody>
-            </table>
-        </section>
-
-        <!-- GRAFICI -->
-        <section id="page-grafici" class="page">
-            <h2>Grafici</h2>
-            <canvas id="graficoMovimenti"></canvas>
-        </section>
-
-        <!-- IMPOSTAZIONI -->
-        <section id="page-impostazioni" class="page">
-            <h2>Impostazioni</h2>
-            <label>
-                Modalità scura
-                <input type="checkbox" id="toggle-darkmode">
-            </label>
-        </section>
-    </main>
-
-    <!-- MODALE AGGIUNGI MOVIMENTO -->
-    <div id="modal-movimento" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>Nuovo Movimento</h3>
-            <form id="form-movimento">
-                <label>Descrizione:
-                    <input type="text" id="movimento-desc" required>
-                </label>
-                <label>Importo:
-                    <input type="number" id="movimento-importo" required>
-                </label>
-                <label>Tipo:
-                    <select id="movimento-tipo">
-                        <option value="entrata">Entrata</option>
-                        <option value="spesa">Spesa</option>
-                    </select>
-                </label>
-                <button type="submit">Salva</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="state.js"></script>
-    <script src="storage.js"></script>
-    <script src="ui.js"></script>
-    <script src="app.js"></script>
+<script src="storage.js"></script>
+<script src="state.js"></script>
+<script src="app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('saldoDisplay').textContent = `€${state.getSaldo().toFixed(2)}`;
+});
+</script>
 </body>
 </html>
