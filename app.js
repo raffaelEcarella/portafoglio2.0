@@ -1,30 +1,32 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Inizializza UI
-    renderMovimenti();
-    initGrafico();
-    initNav();
-    initModal();
-    initSettings();
-});
+const app = {
+  initMovimenti() {
+    storage.caricaMovimenti();
+    storage.caricaDarkMode();
+    this.applyDarkMode();
+  },
 
-// Aggiungi Movimento
-function aggiungiMovimento(movimento) {
-    appState.movimenti.push(movimento);
-    salvaMovimenti();
-    renderMovimenti();
-    aggiornaGrafico();
-}
+  aggiungiMovimento(descrizione, importo, tipo) {
+    const movimento = { descrizione, importo, tipo };
+    state.movimenti.push(movimento);
+    storage.salvaMovimenti();
+  },
 
-// Submit form movimento
-document.getElementById("form-movimento").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const desc = document.getElementById("movimento-desc").value;
-    const importo = parseFloat(document.getElementById("movimento-importo").value);
-    const tipo = document.getElementById("movimento-tipo").value;
+  renderMovimenti() {
+    const tbody = document.querySelector('#movimentiTable tbody');
+    tbody.innerHTML = '';
+    state.movimenti.forEach(m => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${m.descrizione}</td><td>€${m.importo.toFixed(2)}</td><td>${m.tipo}</td>`;
+      tbody.appendChild(tr);
+    });
+  },
 
-    aggiungiMovimento({ desc, importo, tipo, data: new Date().toISOString() });
-    chiudiModal();
-});
-
-// Bottone apri modale
-document.getElementById("btn-add-movimento").addEventListener("click", apriModal);
+  applyDarkMode() {
+    if (state.darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+    storage.salvaDarkMode();
+  }
+};
