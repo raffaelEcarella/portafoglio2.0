@@ -1,10 +1,34 @@
-<section id="grafici" class="page">
-  <div class="wallet-card">
-    <h3>Grafico Categorie</h3>
-    <canvas id="graficoCategorie"></canvas>
-  </div>
-  <div class="wallet-card">
-    <h3>Saldo Progressivo</h3>
-    <canvas id="graficoSaldo"></canvas>
-  </div>
-</section>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grafici - Finanze 2026</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header>
+  <h1>Grafici</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="movements.html">Movimenti</a>
+    <a href="charts.html" class="active">Grafici</a>
+    <a href="settings.html">Impostazioni</a>
+  </nav>
+</header>
+
+<main>
+  <canvas id="graficoMovimenti" width="400" height="200"></canvas>
+</main>
+
+<script src="storage.js"></script>
+<script src="state.js"></script>
+<script src="chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  chart.renderGrafico();
+});
+</script>
+</body>
+</html>
