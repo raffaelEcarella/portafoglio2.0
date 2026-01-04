@@ -1,173 +1,21 @@
-// CC99 - app.js
-loadState();
+// app.js
 
-// --- UTILITY ---
-function getWalletById(id){
-  return appState.finance.wallets.find(w => w.id === parseInt(id));
-}
+// Inizializza app
+document.addEventListener("DOMContentLoaded", () => {
+    UI.renderWalletOptions();
+    UI.renderMovements();
+    ChartModule.initCharts();
 
-// --- AGGIORNAMENTO SALDI ---
-function updateSaldi(){
-  let cumulative = 0;
-  appState.finance.wallets.forEach(w=>{
-    let saldo = w.movimenti.reduce((acc,m)=> m.tipo==="entrata"?acc+m.importo:acc-m.importo,0);
-    w.saldo = saldo;
-    cumulative += saldo;
-  });
-  document.getElementById("saldoVal").textContent = `€${cumulative.toFixed(2)}`;
-  saveState();
-  renderWallets();
-  renderCharts();
-  renderMovimentiList();
-}
-
-// --- RENDER WALLETS ---
-function renderWallets(){
-  const container = document.getElementById("walletsContainer");
-  container.innerHTML = "";
-  appState.finance.wallets.forEach(w=>{
-    const div = document.createElement("div");
-    div.className = "wallet-card";
-    div.style.backgroundColor = w.color;
-    div.innerHTML = `<h3>${w.name}</h3><div>€${(w.saldo||0).toFixed(2)}</div>`;
-    container.appendChild(div);
-  });
-}
-
-// --- MODALE MOVIMENTO ---
-function openMovimentoModal(tipo){
-  const modal = document.getElementById("movimentoModal");
-  modal.style.display = "flex";
-  document.getElementById("movTipo").value = tipo;
-  populateWalletSelect();
-}
-
-function populateWalletSelect(){
-  const sel = document.getElementById("movWalletSelect");
-  sel.innerHTML="";
-  appState.finance.wallets.forEach(w=>{
-    const opt = document.createElement("option");
-    opt.value = w.id;
-    opt.textContent = w.name;
-    sel.appendChild(opt);
-  });
-}
-
-// --- SALVA MOVIMENTO ---
-document.getElementById("saveMovimentoBtn").onclick = ()=>{
-  const walletId = parseInt(document.getElementById("movWalletSelect").value);
-  const descrizione = document.getElementById("movDescrizione").value.trim();
-  const importo = parseFloat(document.getElementById("movImporto").value);
-  const tipo = document.getElementById("movTipo").value;
-  const data = document.getElementById("movData").value;
-  const ricorrenza = parseInt(document.getElementById("movRicorrenza").value) || 0;
-
-  if(!descrizione || isNaN(importo) || importo<=0 || !data) return alert("Compila tutti i campi correttamente.");
-
-  const wallet = getWalletById(walletId);
-  if(!wallet) return;
-
-  for(let i=0;i<=ricorrenza;i++){
-    const d = new Date(data);
-    d.setMonth(d.getMonth()+i);
-    wallet.movimenti.push({
-      descrizione,
-      importo,
-      tipo,
-      data: d.toISOString().split('T')[0]
+    // Bottoni
+    document.getElementById("btn-add-income").addEventListener("click", () => {
+        UI.showMovementForm("income");
     });
-  }
 
-  updateSaldi();
-  closeMovimentoModal();
-};
-
-document.getElementById("cancelMovimentoBtn").onclick = closeMovimentoModal;
-function closeMovimentoModal(){
-  document.getElementById("movimentoModal").style.display="none";
-  document.getElementById("movDescrizione").value="";
-  document.getElementById("movImporto").value="";
-  document.getElementById("movRicorrenza").value=0;
-}
-
-// --- ADD PORTAFOGLIO ---
-document.getElementById("addWalletBtn").onclick = ()=>{
-  if(appState.finance.wallets.length>=6) return alert("Massimo 6 portafogli");
-  const name = prompt("Nome nuovo portafoglio:");
-  if(!name) return;
-  const color = prompt("Colore (hex) per il portafoglio:", "#007bff");
-  const newWallet = {
-    id: Date.now(),
-    name,
-    color,
-    movimenti: [],
-    includeInCharts:true,
-    saldo:0
-  };
-  appState.finance.wallets.push(newWallet);
-  saveState();
-  renderWallets();
-  populateWalletSelect();
-  populateWalletFilter();
-};
-
-// --- FILTRI ---
-function populateWalletFilter(){
-  const selMov = document.getElementById("filterWalletMovimenti");
-  const selCal = document.getElementById("filterWalletCalendario");
-  [selMov, selCal].forEach(sel=>{
-    sel.innerHTML="";
-    appState.finance.wallets.forEach(w=>{
-      const opt = document.createElement("option");
-      opt.value = w.id;
-      opt.textContent = w.name;
-      sel.appendChild(opt);
+    document.getElementById("btn-add-expense").addEventListener("click", () => {
+        UI.showMovementForm("expense");
     });
-  });
-}
 
-// --- RENDER MOVIMENTI LIST ---
-function renderMovimentiList(){
-  const ul = document.getElementById("movimentiList");
-  ul.innerHTML="";
-  let movimenti = [];
-  const filterWallet = parseInt(document.getElementById("filterWalletMovimenti")?.value);
-  const filterCat = document.getElementById("filterCategoria")?.value.toLowerCase();
-  const filterDa = document.getElementById("filterDa")?.value;
-  const filterA = document.getElementById("filterA")?.value;
-
-  appState.finance.wallets.forEach(w=>{
-    if(filterWallet && w.id!==filterWallet) return;
-    w.movimenti.forEach(m=>{
-      if(filterCat && !m.descrizione.toLowerCase().includes(filterCat)) return;
-      if(filterDa && m.data<filterDa) return;
-      if(filterA && m.data>filterA) return;
-      movimenti.push({...m, wallet:w.name});
-    });
-  });
-
-  movimenti.sort((a,b)=> new Date(b.data)-new Date(a.data));
-  movimenti.forEach(m=>{
-    const li = document.createElement("li");
-    li.textContent = `[${m.data}] ${m.wallet} - ${m.descrizione} : €${m.importo.toFixed(2)} (${m.tipo})`;
-    ul.appendChild(li);
-  });
-}
-
-// --- FILTRI BOTTONI ---
-document.getElementById("applyFiltersBtn").onclick = renderMovimentiList;
-document.getElementById("clearFiltersBtn").onclick = ()=>{
-  document.getElementById("filterCategoria").value="";
-  document.getElementById("filterDa").value="";
-  document.getElementById("filterA").value="";
-  document.getElementById("filterWalletMovimenti").value="";
-  renderMovimentiList();
-};
-
-// --- BOTTONI ENTRATA/SPESA ---
-document.getElementById("addEntrataBtn").onclick = ()=> openMovimentoModal("entrata");
-document.getElementById("addSpesaBtn").onclick = ()=> openMovimentoModal("spesa");
-
-// --- INIT ---
-updateSaldi();
-populateWalletFilter();
+    // Filtri
+    document.getElementById("filter-wallet").addEventListener("change", UI.applyFilters);
+    document.getElementById("filter-category").addEventListener("change", UI.applyFilters);
+});
