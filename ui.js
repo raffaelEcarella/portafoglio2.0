@@ -25,7 +25,7 @@ export function renderMovements() {
     const div = document.createElement('div');
     div.classList.add('movement-card');
     div.innerHTML = `
-      ${m.date} - <strong>${m.category}</strong> (${m.type}) : €${m.amount.toFixed(2)} 
+      ${m.date} - <strong>${m.category}</strong> (${m.type === 'income' ? 'Entrata' : 'Spesa'}) : €${m.amount.toFixed(2)} 
       <em>Wallet: ${m.wallet}</em>`;
     container.appendChild(div);
   });
@@ -43,12 +43,7 @@ export function populateWalletSelect() {
 }
 
 export function renderCharts() {
-  // --- DATI ---
   const categorie = {};
-  let saldoTotale = 0;
-
-  state.wallets.forEach(w => saldoTotale += w.balance);
-
   state.movements.forEach(m => {
     if (!categorie[m.category]) categorie[m.category] = 0;
     categorie[m.category] += (m.type === 'income' ? m.amount : -m.amount);
@@ -62,15 +57,14 @@ export function renderCharts() {
     data: {
       labels: Object.keys(categorie),
       datasets: [{
-        label: 'Movimenti per Categoria',
         data: Object.values(categorie),
-        backgroundColor: ['#1E3A8A', '#10B981', '#6B7280', '#3B82F6', '#34D399'],
+        backgroundColor: ['#1E3A8A', '#10B981', '#6B7280', '#3B82F6', '#34D399']
       }]
     },
     options: { responsive: true }
   });
 
-  // --- GRAFICO SALDO ---
+  // --- GRAFICO SALDO WALLET ---
   const ctx2 = document.getElementById('graficoSaldo').getContext('2d');
   if (graficoSaldo) graficoSaldo.destroy();
   graficoSaldo = new Chart(ctx2, {
