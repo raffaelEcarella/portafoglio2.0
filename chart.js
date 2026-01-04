@@ -1,64 +1,36 @@
-// chart.js
+let chartCategorie=null, chartSaldo=null;
 
-const ChartModule = (() => {
-    let balanceChart, categoryChart;
+function renderGrafici(){
+  const wallets = appState.finance.wallets.filter(w=>w.includeInCharts);
+  const labels = wallets.map(w=>w.name);
+  const entrateData = wallets.map(w=>w.movimenti.filter(m=>m.tipo==="entrata").reduce((a,b)=>a+b.importo,0));
+  const speseData = wallets.map(w=>w.movimenti.filter(m=>m.tipo==="spesa").reduce((a,b)=>a+b.importo,0));
 
-    function initCharts() {
-        const ctxBalance = document.getElementById("chart-balance").getContext("2d");
-        balanceChart = new Chart(ctxBalance, {
-            type: "line",
-            data: {
-                labels: [],
-                datasets: [{
-                    label: "Saldo",
-                    data: [],
-                    borderColor: "#1E90FF",
-                    backgroundColor: "rgba(30,144,255,0.2)",
-                    tension: 0.3
-                }]
-            }
-        });
+  const ctx1 = document.getElementById("graficoCategorie")?.getContext("2d");
+  if(ctx1){
+    if(chartCategorie) chartCategorie.destroy();
+    chartCategorie = new Chart(ctx1,{
+      type:'doughnut',
+      data:{
+        labels:['Entrate','Spese'],
+        datasets:[{data:[entrateData.reduce((a,b)=>a+b,0), speseData.reduce((a,b)=>a+b,0)],
+          backgroundColor:[appState.ui.chartColors.entrate, appState.ui.chartColors.spese]}]
+      },
+      options:{responsive:true}
+    });
+  }
 
-        const ctxCategory = document.getElementById("chart-category").getContext("2d");
-        categoryChart = new Chart(ctxCategory, {
-            type: "doughnut",
-            data: {
-                labels: [],
-                datasets: [{
-                    data: [],
-                    backgroundColor: ["#1E90FF", "#32CD32", "#778899", "#20B2AA", "#4682B4"]
-                }]
-            }
-        });
-    }
-
-    function updateCharts(filteredMovements) {
-        // Balance chart
-        let balance = 0;
-        const labels = [];
-        const data = [];
-        filteredMovements.forEach(m => {
-            balance += m.type === "income" ? m.amount : -m.amount;
-            labels.push(m.date);
-            data.push(balance);
-        });
-        balanceChart.data.labels = labels;
-        balanceChart.data.datasets[0].data = data;
-        balanceChart.update();
-
-        // Category chart
-        const categoryTotals = {};
-        filteredMovements.forEach(m => {
-            if (!categoryTotals[m.category]) categoryTotals[m.category] = 0;
-            categoryTotals[m.category] += m.amount;
-        });
-        categoryChart.data.labels = Object.keys(categoryTotals);
-        categoryChart.data.datasets[0].data = Object.values(categoryTotals);
-        categoryChart.update();
-    }
-
-    return {
-        initCharts,
-        updateCharts
-    };
-})();
+  const ctx2 = document.getElementById("graficoSaldo")?.getContext("2d");
+  if(ctx2){
+    if(chartSaldo) chartSaldo.destroy();
+    const movimenti = wallets.flatMap(w=>w.movimenti.map(m=>({...m,wallet:w.name}))).sort((a,b)=>new Date(a.data)-new Date(b.data));
+    chartSaldo = new Chart(ctx2,{
+      type:'bar',
+      data:{
+        labels: movimenti.map(m=>m.data),
+        datasets:[{label:'Saldo', data: movimenti.map(m=>m.tipo==="entrata"?m.importo:-m.importo), backgroundColor: appState.ui.chartColors.saldo}]
+      },
+      options:{responsive:true}
+    });
+  }
+}
