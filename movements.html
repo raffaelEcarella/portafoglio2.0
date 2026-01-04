@@ -1,47 +1,70 @@
-<section id="movimenti" class="page">
-  <div class="wallet-card">
-    <h3>Movimenti</h3>
-    <div class="filters">
-      <label>Portafoglio:</label>
-      <select id="filterWalletMovimenti"></select>
-      <label>Categoria:</label>
-      <input type="text" id="filterCategoria" placeholder="Es: Alimentari">
-      <label>Da:</label>
-      <input type="date" id="filterDa">
-      <label>A:</label>
-      <input type="date" id="filterA">
-      <div class="btn-row">
-        <button id="applyFiltersBtn">Applica Filtri</button>
-        <button id="clearFiltersBtn">Pulisci Filtri</button>
-      </div>
-    </div>
-    <ul id="movimentiList"></ul>
-    <div class="btn-row">
-      <button id="addEntrataBtn">+ Entrata</button>
-      <button id="addSpesaBtn">+ Spesa</button>
-    </div>
-  </div>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movimenti - Finanze 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Movimenti</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="movements.html" class="active">Movimenti</a>
+    <a href="charts.html">Grafici</a>
+    <a href="settings.html">Impostazioni</a>
+  </nav>
+</header>
 
-  <div id="movimentoModal" class="modal">
-    <div class="modal-content">
-      <h3 id="modalTitle">Aggiungi Movimento</h3>
-      <label>Portafoglio:</label>
-      <select id="movWalletSelect"></select>
-      <label>Descrizione:</label>
-      <input type="text" id="movDescrizione">
-      <label>Importo:</label>
-      <input type="number" id="movImporto">
-      <label>Tipo:</label>
-      <select id="movTipo">
+<main>
+  <section class="form-section">
+    <h2>Aggiungi movimento</h2>
+    <form id="movimentoForm">
+      <input type="text" id="descrizione" placeholder="Descrizione" required>
+      <input type="number" step="0.01" id="importo" placeholder="Importo" required>
+      <select id="tipo">
         <option value="entrata">Entrata</option>
-        <option value="spesa">Spesa</option>
+        <option value="uscita">Uscita</option>
       </select>
-      <label>Data:</label>
-      <input type="date" id="movData">
-      <div class="modal-buttons">
-        <button id="saveMovimentoBtn">Salva</button>
-        <button id="cancelMovimentoBtn">Annulla</button>
-      </div>
-    </div>
-  </div>
-</section>
+      <button type="submit">Aggiungi</button>
+    </form>
+  </section>
+
+  <section class="lista-section">
+    <h2>Lista movimenti</h2>
+    <table id="movimentiTable">
+      <thead>
+        <tr>
+          <th>Descrizione</th>
+          <th>Importo</th>
+          <th>Tipo</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+<script src="storage.js"></script>
+<script src="state.js"></script>
+<script src="app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  app.initMovimenti();
+  app.renderMovimenti();
+
+  const form = document.getElementById('movimentoForm');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const descrizione = document.getElementById('descrizione').value;
+    const importo = parseFloat(document.getElementById('importo').value);
+    const tipo = document.getElementById('tipo').value;
+    app.aggiungiMovimento(descrizione, importo, tipo);
+    form.reset();
+    app.renderMovimenti();
+  });
+});
+</script>
+</body>
+</html>
