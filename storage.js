@@ -1,10 +1,9 @@
-// storage.js
+function saveState() {
+  localStorage.setItem("portafoglio2_state", JSON.stringify(appState));
+}
 
-const storage = {
-    saveMovements(movements) {
-        localStorage.setItem("movements", JSON.stringify(movements));
-    },
-    loadMovements() {
-        return JSON.parse(localStorage.getItem("movements")) || [];
-    }
-};
+function loadState() {
+  const data = localStorage.getItem("portafoglio2_state");
+  if(data) Object.assign(appState, JSON.parse(data));
+  if(appState.ui.darkMode) document.body.classList.add("dark");
+}
