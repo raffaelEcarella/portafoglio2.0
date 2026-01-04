@@ -1,38 +1,58 @@
-// CC99 - ui.js
+// ui.js
 
-// --- NAVIGAZIONE ---
-const pages = document.querySelectorAll(".page");
-const toolbarBtns = document.querySelectorAll(".toolbar button");
-toolbarBtns.forEach(btn=>{
-  btn.onclick=()=>{
-    const target = btn.dataset.page;
-    pages.forEach(p=>p.classList.remove("active"));
-    document.getElementById(target).classList.add("active");
-  };
-});
+const UI = (() => {
+    function renderWalletOptions() {
+        const walletSelect = document.getElementById("filter-wallet");
+        walletSelect.innerHTML = `<option value="all">Tutti i Portafogli</option>`;
+        state.wallets.forEach(wallet => {
+            const option = document.createElement("option");
+            option.value = wallet.id;
+            option.textContent = wallet.name;
+            walletSelect.appendChild(option);
+        });
+    }
 
-// --- DARK MODE ---
-const darkToggle = document.getElementById("darkToggle");
-darkToggle.onclick = () => {
-  document.body.classList.toggle("dark");
-  appState.darkMode = document.body.classList.contains("dark");
-  saveState();
-};
+    function renderMovements() {
+        const list = document.getElementById("movements-list");
+        list.innerHTML = "";
+        const filtered = state.getFilteredMovements();
+        filtered.forEach(m => {
+            const li = document.createElement("li");
+            li.textContent = `${m.date} - ${m.category} - ${m.amount}€ (${m.type})`;
+            list.appendChild(li);
+        });
+        ChartModule.updateCharts(filtered);
+    }
 
-// --- POPOLAMENTO IMPOSTAZIONI ---
-function renderSettings(){
-  const div = document.getElementById("walletSettings");
-  div.innerHTML="";
-  appState.finance.wallets.forEach(w=>{
-    const container = document.createElement("div");
-    container.innerHTML = `<strong>${w.name}</strong> - Mostra nei grafici: <input type="checkbox" ${w.includeInCharts?"checked":""} data-id="${w.id}">`;
-    div.appendChild(container);
-    container.querySelector("input").onchange = (e)=>{
-      const wal = getWalletById(parseInt(e.target.dataset.id));
-      wal.includeInCharts = e.target.checked;
-      saveState();
-      renderCharts();
+    function showMovementForm(type) {
+        const amount = prompt(`Inserisci importo (${type === "income" ? "Entrata" : "Spesa"}):`);
+        if (!amount || isNaN(amount)) return alert("Importo non valido");
+        const category = prompt("Categoria:");
+        if (!category) return alert("Categoria obbligatoria");
+        const walletId = prompt("Portafoglio (inserire ID):");
+        if (!walletId) return alert("Portafoglio obbligatorio");
+
+        state.addMovement({
+            id: Date.now(),
+            type,
+            amount: parseFloat(amount),
+            category,
+            walletId,
+            date: new Date().toLocaleDateString()
+        });
+        renderMovements();
+    }
+
+    function applyFilters() {
+        state.filters.wallet = document.getElementById("filter-wallet").value;
+        state.filters.category = document.getElementById("filter-category").value;
+        renderMovements();
+    }
+
+    return {
+        renderWalletOptions,
+        renderMovements,
+        showMovementForm,
+        applyFilters
     };
-  });
-}
-renderSettings();
+})();
