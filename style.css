@@ -1,65 +1,75 @@
 body {
-  margin:0;
-  font-family:'Inter',sans-serif;
-  background:#f0f4f8;
-  color:#1f2937;
-  display:flex;
-  flex-direction:column;
-  min-height:100vh;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
 }
 
-header.topbar {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:15px 0;
-  background:linear-gradient(90deg,#2563eb,#10b981);
-  color:white;
-  font-size:1.5rem;
-  font-weight:700;
+header {
+    background-color: #1e3a5f;
+    color: #fff;
+    padding: 1rem;
 }
 
-.navbar {
-  display:flex;
-  justify-content:space-around;
-  background:#1f2937;
+header nav button {
+    margin: 0 5px;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #4a90e2;
+    color: #fff;
+    cursor: pointer;
 }
-.navbar button {
-  flex:1;
-  padding:12px;
-  margin:5px;
-  background:#2563eb;
-  color:white;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
+
+header nav button:hover {
+    background-color: #357ab8;
 }
-.navbar button:hover {opacity:0.85;}
 
-.page {display:none; padding:15px;}
-.page.active {display:block;}
-
-.wallet-card {
-  background:#3b82f6;
-  color:white;
-  padding:15px;
-  border-radius:12px;
-  margin:10px 0;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-weight:600;
+.page {
+    display: none;
+    padding: 1rem;
 }
-.wallet-card.cumulative {background:#10b981;}
 
-button {cursor:pointer; padding:10px 15px; border:none; border-radius:8px; font-weight:600;}
-.btn-row {display:flex; gap:10px;}
-input, select {padding:8px; margin:5px 0; border-radius:6px; border:1px solid #ccc; width:100%; box-sizing:border-box;}
+.page.active {
+    display: block;
+}
 
-.modal {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;}
-.modal-content {background:white; padding:20px; border-radius:16px; width:90%; max-width:400px;}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-body.dark {background:#111827; color:white;}
-body.dark .wallet-card.cumulative {background:#065f46;}
-body.dark .wallet-card {background:#1f2937;}
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background: #fff;
+    margin: 10% auto;
+    padding: 1rem;
+    width: 300px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.modal .close {
+    position: absolute;
+    top: 10px; right: 10px;
+    cursor: pointer;
+}
+
+.darkmode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
