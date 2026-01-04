@@ -1,44 +1,35 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Tracker</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafoglio 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <h1>Finance Tracker</h1>
-        </header>
-        <nav>
-            <button id="btn-add-income">Aggiungi Entrata</button>
-            <button id="btn-add-expense">Aggiungi Spesa</button>
-            <select id="filter-wallet">
-                <option value="all">Tutti i Portafogli</option>
-            </select>
-            <select id="filter-category">
-                <option value="all">Tutte le Categorie</option>
-            </select>
-        </nav>
-        <main>
-            <section class="movements">
-                <h2>Movimenti</h2>
-                <ul id="movements-list"></ul>
-            </section>
-            <section class="charts">
-                <canvas id="chart-balance"></canvas>
-                <canvas id="chart-category"></canvas>
-            </section>
-        </main>
-    </div>
 
-    <script src="state.js"></script>
-    <script src="storage.js"></script>
-    <script src="ui.js"></script>
-    <script src="chart.js"></script>
-    <script src="app.js"></script>
+<header class="topbar">
+  <h1>Portafoglio 2.0</h1>
+</header>
+
+<nav class="navbar">
+  <button data-page="home">Home</button>
+  <button data-page="movimenti">Movimenti</button>
+  <button data-page="grafici">Grafici</button>
+  <button data-page="impostazioni">Impostazioni</button>
+</nav>
+
+<main id="app">
+  <!-- Le sezioni saranno caricate dinamicamente -->
+</main>
+
+<script src="state.js"></script>
+<script src="storage.js"></script>
+<script src="chart.js"></script>
+<script src="ui.js"></script>
+<script src="app.js"></script>
+
 </body>
 </html>
