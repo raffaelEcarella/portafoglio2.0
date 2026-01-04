@@ -1,95 +1,140 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portafoglio 2.0</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafoglio 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <!-- Toolbar di navigazione -->
-  <div class="toolbar">
-    <button data-page="wallets">Wallets</button>
-    <button data-page="movements">Movimenti</button>
-    <button data-page="charts">Statistiche</button>
-    <button id="darkModeToggle">🌙</button>
-  </div>
+<!-- TOP BAR -->
+<header class="topbar">
+  <h1>Portafoglio 2.0</h1>
+</header>
 
-  <!-- PAGINE -->
-  <div id="wallets" class="page active">
-    <h1>I tuoi Wallets</h1>
-    <div id="walletsContainer"></div>
-    <button id="addWalletBtn">Aggiungi Wallet</button>
-  </div>
+<!-- MAIN CONTAINER -->
+<main class="main-container">
 
-  <div id="movements" class="page">
-    <h1>Movimenti</h1>
-    <div id="movementsContainer"></div>
-    <button id="addMovementBtn">Aggiungi Movimento</button>
-  </div>
+  <!-- HOME / SALDO -->
+  <section id="home" class="page active">
+    <div id="walletsContainer" class="wallets-grid"></div>
+    <div class="wallet-card cumulative">
+      <h3>Saldo Cumulativo</h3>
+      <div id="saldoVal">€0</div>
+      <button id="addWalletBtn">+ Aggiungi Portafoglio</button>
+    </div>
+  </section>
 
-  <div id="charts" class="page">
-    <h1>Statistiche</h1>
-    <div class="chart-container">
+  <!-- MOVIMENTI -->
+  <section id="movimenti" class="page">
+    <div class="wallet-card">
+      <h3>Movimenti</h3>
+      <div class="filters">
+        <label>Portafoglio:</label>
+        <select id="filterWalletMovimenti"></select>
+        <label>Categoria:</label>
+        <input type="text" id="filterCategoria">
+        <label>Da:</label>
+        <input type="date" id="filterDa">
+        <label>A:</label>
+        <input type="date" id="filterA">
+        <div class="btn-row">
+          <button id="applyFiltersBtn">Applica Filtri</button>
+          <button id="clearFiltersBtn">Pulisci Filtri</button>
+        </div>
+      </div>
+      <ul id="movimentiList"></ul>
+      <div class="btn-row">
+        <button id="addEntrataBtn">+ Entrata</button>
+        <button id="addSpesaBtn">+ Spesa</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRAFICI -->
+  <section id="grafici" class="page">
+    <div class="wallet-card">
+      <h3>Grafico Categorie</h3>
       <canvas id="graficoCategorie"></canvas>
     </div>
-    <div class="chart-container">
+    <div class="wallet-card">
+      <h3>Saldo Progressivo</h3>
       <canvas id="graficoSaldo"></canvas>
     </div>
-  </div>
+  </section>
 
-  <!-- MODAL MOVIMENTO -->
-  <div id="modalMovement" class="modal">
-    <div class="modal-content">
-      <h2>Nuovo Movimento</h2>
-      <label for="movementWallet">Wallet:</label>
-      <select id="movementWallet"></select>
+  <!-- CALENDARIO -->
+  <section id="calendario" class="page">
+    <div class="wallet-card">
+      <h3>Calendario Movimenti</h3>
+      <label>Portafoglio:</label>
+      <select id="filterWalletCalendario"></select>
+      <label>Mese:</label>
+      <input type="month" id="filterMeseCalendario">
+      <table id="calendarioTable">
+        <thead>
+          <tr><th>Data</th><th>Entrate</th><th>Spese</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
 
-      <label for="movementType">Tipo:</label>
-      <select id="movementType">
-        <option value="income">Entrata</option>
-        <option value="expense">Uscita</option>
-      </select>
+  <!-- IMPOSTAZIONI -->
+  <section id="impostazioni" class="page">
+    <div class="wallet-card">
+      <h3>Impostazioni</h3>
+      <label>Dark Mode:</label>
+      <button id="darkToggle">🌙 Toggle Dark Mode</button>
+      <div id="walletSettings"></div>
+      <div class="settings-footer">CREATED BY CLAUDIONIX99</div>
+    </div>
+  </section>
 
-      <label for="movementCategory">Categoria:</label>
-      <input type="text" id="movementCategory" placeholder="Es. Cibo, Trasporti">
+</main>
 
-      <label for="movementAmount">Importo:</label>
-      <input type="number" id="movementAmount" placeholder="0.00">
+<!-- TOOLBAR INFERIORE -->
+<div class="toolbar">
+  <button data-page="home">Home</button>
+  <button data-page="movimenti">Movimenti</button>
+  <button data-page="grafici">Grafici</button>
+  <button data-page="calendario">Calendario</button>
+  <button data-page="impostazioni">Impostazioni</button>
+</div>
 
-      <label for="movementDate">Data:</label>
-      <input type="date" id="movementDate">
-
-      <div style="margin-top:1rem; text-align:right;">
-        <button id="saveMovementBtn">Salva</button>
-        <button id="cancelMovementBtn">Annulla</button>
-      </div>
+<!-- MODALE AGGIUNGI/MODIFICA MOVIMENTO -->
+<div id="movimentoModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle">Aggiungi Movimento</h3>
+    <label>Portafoglio:</label>
+    <select id="movWalletSelect"></select>
+    <label>Descrizione:</label>
+    <input type="text" id="movDescrizione">
+    <label>Importo:</label>
+    <input type="number" id="movImporto" min="0.01" step="0.01">
+    <label>Tipo:</label>
+    <select id="movTipo">
+      <option value="entrata">Entrata</option>
+      <option value="spesa">Spesa</option>
+    </select>
+    <label>Data:</label>
+    <input type="date" id="movData">
+    <label>Ricorrenza (mesi, solo spese):</label>
+    <input type="number" id="movRicorrenza" value="0" min="0">
+    <div class="modal-buttons">
+      <button id="saveMovimentoBtn">Salva</button>
+      <button id="cancelMovimentoBtn">Annulla</button>
     </div>
   </div>
+</div>
 
-  <!-- MODAL WALLET -->
-  <div id="modalWallet" class="modal">
-    <div class="modal-content">
-      <h2>Nuovo Wallet</h2>
-      <label for="walletName">Nome Wallet:</label>
-      <input type="text" id="walletName" placeholder="Es. Conto Corrente">
-
-      <label for="walletBalance">Saldo Iniziale:</label>
-      <input type="number" id="walletBalance" placeholder="0.00">
-
-      <div style="margin-top:1rem; text-align:right;">
-        <button id="saveWalletBtn">Salva</button>
-        <button id="cancelWalletBtn">Annulla</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="storage.js"></script>
-  <script src="state.js"></script>
-  <script src="ui.js"></script>
-  <script src="app.js"></script>
+<script src="state.js"></script>
+<script src="storage.js"></script>
+<script src="chart.js"></script>
+<script src="app.js"></script>
+<script src="ui.js"></script>
 </body>
 </html>
