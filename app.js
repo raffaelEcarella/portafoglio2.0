@@ -1,40 +1,30 @@
-// --- INIT APP ---
-loadState();
-renderWallets();
-populateWalletFilter();
-renderGrafici();
-
-// --- NAVIGAZIONE PAGINE ---
-document.querySelectorAll(".navbar button").forEach(btn=>{
-  btn.onclick=()=>showPage(btn.dataset.page);
+document.addEventListener("DOMContentLoaded", () => {
+    // Inizializza UI
+    renderMovimenti();
+    initGrafico();
+    initNav();
+    initModal();
+    initSettings();
 });
-function showPage(page){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  const section = document.getElementById(page);
-  if(section) section.classList.add("active");
-  if(page==="grafici") renderGrafici();
+
+// Aggiungi Movimento
+function aggiungiMovimento(movimento) {
+    appState.movimenti.push(movimento);
+    salvaMovimenti();
+    renderMovimenti();
+    aggiornaGrafico();
 }
 
-// --- ADD PORTAFOGLIO ---
-document.getElementById("addWalletBtn").onclick = ()=>{
-  if(appState.finance.wallets.length>=6) return alert("Massimo 6 portafogli");
-  const name = prompt("Nome nuovo portafoglio:");
-  if(!name) return;
-  const color = prompt("Colore (hex) per il portafoglio:", "#007bff");
-  const newWallet = {
-    id: Date.now(),
-    name,
-    color,
-    movimenti: [],
-    includeInCharts:true
-  };
-  appState.finance.wallets.push(newWallet);
-  saveState();
-  renderWallets();
-  populateWalletSelect();
-  populateWalletFilter();
-};
+// Submit form movimento
+document.getElementById("form-movimento").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const desc = document.getElementById("movimento-desc").value;
+    const importo = parseFloat(document.getElementById("movimento-importo").value);
+    const tipo = document.getElementById("movimento-tipo").value;
 
-// --- BOTTONI ENTRATE/SPESA ---
-document.getElementById("addEntrataBtn").onclick = ()=>openMovimentoModal("entrata");
-document.getElementById("addSpesaBtn").onclick = ()=>openMovimentoModal("spesa");
+    aggiungiMovimento({ desc, importo, tipo, data: new Date().toISOString() });
+    chiudiModal();
+});
+
+// Bottone apri modale
+document.getElementById("btn-add-movimento").addEventListener("click", apriModal);
