@@ -1,34 +1,56 @@
 body{
   margin:0;
   font-family:Inter,sans-serif;
-  background:#f1f5f9;
+  background:linear-gradient(135deg,#f8fafc,#e2e8f0);
 }
 
 body.dark{
-  background:#0f172a;
+  background:linear-gradient(135deg,#0f172a,#020617);
   color:white;
 }
 
 .topbar,.toolbar{
-  background:#2563eb;
+  background:linear-gradient(90deg,#2563eb,#10b981);
   color:white;
-  padding:10px;
+  padding:15px;
   text-align:center;
 }
 
 .toolbar button{
   margin:5px;
+  padding:10px;
+  border-radius:10px;
 }
 
 .page{display:none}
 .page.active{display:block}
 
-.wallet-card{
-  background:#3b82f6;
-  color:white;
+.card,.wallet-card{
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(8px);
   padding:15px;
   margin:10px;
-  border-radius:10px;
-  display:flex;
-  justify-content:space-between;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+body.dark .card,body.dark .wallet-card{
+  background:rgba(15,23,42,.8);
+}
+
+ul{list-style:none;padding:0}
+li{padding:8px;border-bottom:1px solid #ccc}
+
+.modal{
+  position:fixed;inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,.5);
+}
+
+.modal-content{
+  background:white;
+  padding:20px;
+  border-radius:16px;
 }
