@@ -1,9 +1,10 @@
-function saveState(){
-  localStorage.setItem("p2_state", JSON.stringify(appState));
-}
+// storage.js
 
-function loadState(){
-  const d = localStorage.getItem("p2_state");
-  if(d) Object.assign(appState, JSON.parse(d));
-  if(appState.ui.darkMode) document.body.classList.add("dark");
-}
+const storage = {
+    saveMovements(movements) {
+        localStorage.setItem("movements", JSON.stringify(movements));
+    },
+    loadMovements() {
+        return JSON.parse(localStorage.getItem("movements")) || [];
+    }
+};
