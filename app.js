@@ -1,127 +1,80 @@
-// CC99 - app.js Portafoglio 2.0
-loadState();
+// app.js
 
-// --- UTILITY ---
-function getWalletById(id){
-  return appState.finance.wallets.find(w => w.id === parseInt(id));
-}
+import { getState, setState } from './state.js';
+import { saveData, loadData } from './storage.js';
+import { renderWallets, renderMovements, renderCharts, populateWalletSelect } from './ui.js';
 
-// --- AGGIORNAMENTO SALDI ---
-function updateSaldi(){
-  let cumulative = 0;
-  appState.finance.wallets.forEach(w=>{
-    let saldo = w.movimenti.reduce((acc,m)=> m.tipo==="entrata"?acc+m.importo:acc-m.importo,0);
-    w.saldo = saldo;
-    cumulative += saldo;
-  });
-  document.getElementById("saldoVal").textContent = `€${cumulative.toFixed(2)}`;
-  saveState();
+const state = getState();
+
+// --- INIZIALIZZAZIONE ---
+document.addEventListener('DOMContentLoaded', () => {
+  loadData();
   renderWallets();
-  renderCharts(); // usa chart.js
-}
-
-// --- RENDER WALLETS ---
-function renderWallets(){
-  const container = document.getElementById("walletsContainer");
-  container.innerHTML = "";
-  appState.finance.wallets.forEach(w=>{
-    const div = document.createElement("div");
-    div.className = "wallet-card";
-    div.style.backgroundColor = w.color;
-    div.innerHTML = `<h3>${w.name}</h3><div>€${(w.saldo||0).toFixed(2)}</div>`;
-    container.appendChild(div);
-  });
-}
-
-// --- MODALE MOVIMENTO ---
-function openMovimentoModal(tipo){
-  const modal = document.getElementById("movimentoModal");
-  modal.style.display = "flex";
-  document.getElementById("movTipo").value = tipo;
+  renderMovements();
+  renderCharts();
   populateWalletSelect();
-}
+});
 
-function populateWalletSelect(){
-  const sel = document.getElementById("movWalletSelect");
-  sel.innerHTML="";
-  appState.finance.wallets.forEach(w=>{
-    const opt = document.createElement("option");
-    opt.value = w.id;
-    opt.textContent = w.name;
-    sel.appendChild(opt);
+// --- GESTIONE PAGINE ---
+document.querySelectorAll('.toolbar button[data-page]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(btn.dataset.page).classList.add('active');
   });
-}
+});
 
-// --- SALVA MOVIMENTO ---
-document.getElementById("saveMovimentoBtn").onclick = ()=>{
-  const walletId = parseInt(document.getElementById("movWalletSelect").value);
-  const descrizione = document.getElementById("movDescrizione").value;
-  const importo = parseFloat(document.getElementById("movImporto").value);
-  const tipo = document.getElementById("movTipo").value;
-  const data = document.getElementById("movData").value;
-  const ricorrenza = parseInt(document.getElementById("movRicorrenza").value) || 0;
+// --- MOVIMENTI ---
+document.getElementById('addMovementBtn').addEventListener('click', () => {
+  document.getElementById('modalMovement').style.display = 'block';
+});
 
-  const wallet = getWalletById(walletId);
-  if(!wallet) return;
+document.getElementById('cancelMovementBtn').addEventListener('click', () => {
+  document.getElementById('modalMovement').style.display = 'none';
+});
 
-  for(let i=0;i<=ricorrenza;i++){
-    const d = new Date(data);
-    d.setMonth(d.getMonth()+i);
-    wallet.movimenti.push({
-      descrizione,
-      importo,
-      tipo,
-      data: d.toISOString().split('T')[0]
-    });
-  }
+document.getElementById('saveMovementBtn').addEventListener('click', () => {
+  const wallet = document.getElementById('movementWallet').value;
+  const type = document.getElementById('movementType').value;
+  const category = document.getElementById('movementCategory').value;
+  const amount = parseFloat(document.getElementById('movementAmount').value);
+  const date = document.getElementById('movementDate').value;
 
-  updateSaldi();
-  closeMovimentoModal();
-};
+  if (!wallet || !category || !amount || !date) return alert('Compila tutti i campi');
 
-document.getElementById("cancelMovimentoBtn").onclick = closeMovimentoModal;
-function closeMovimentoModal(){
-  document.getElementById("movimentoModal").style.display="none";
-  document.getElementById("movDescrizione").value="";
-  document.getElementById("movImporto").value="";
-  document.getElementById("movRicorrenza").value=0;
-}
+  state.movements.push({ wallet, type, category, amount, date });
+  setState(state);
+  saveData();
 
-// --- ADD PORTAFOGLIO ---
-document.getElementById("addWalletBtn").onclick = ()=>{
-  if(appState.finance.wallets.length>=6) return alert("Massimo 6 portafogli");
-  const name = prompt("Nome nuovo portafoglio:");
-  if(!name) return;
-  const color = prompt("Colore (hex) per il portafoglio:", "#0d47a1"); // blu default
-  const newWallet = {
-    id: Date.now(),
-    name,
-    color,
-    movimenti: [],
-    includeInCharts:true
-  };
-  appState.finance.wallets.push(newWallet);
-  saveState();
+  renderMovements();
+  renderCharts();
+  document.getElementById('modalMovement').style.display = 'none';
+});
+
+// --- WALLET ---
+document.getElementById('addWalletBtn').addEventListener('click', () => {
+  document.getElementById('modalWallet').style.display = 'block';
+});
+
+document.getElementById('cancelWalletBtn').addEventListener('click', () => {
+  document.getElementById('modalWallet').style.display = 'none';
+});
+
+document.getElementById('saveWalletBtn').addEventListener('click', () => {
+  const name = document.getElementById('walletName').value;
+  const balance = parseFloat(document.getElementById('walletBalance').value);
+
+  if (!name || isNaN(balance)) return alert('Compila tutti i campi');
+
+  state.wallets.push({ name, balance });
+  setState(state);
+  saveData();
+
   renderWallets();
   populateWalletSelect();
-  populateWalletFilter();
-};
+  document.getElementById('modalWallet').style.display = 'none';
+});
 
-// --- FILTRI ---
-function populateWalletFilter(){
-  const selMov = document.getElementById("filterWalletMovimenti");
-  const selCal = document.getElementById("filterWalletCalendario");
-  [selMov, selCal].forEach(sel=>{
-    sel.innerHTML="";
-    appState.finance.wallets.forEach(w=>{
-      const opt = document.createElement("option");
-      opt.value = w.id;
-      opt.textContent = w.name;
-      sel.appendChild(opt);
-    });
-  });
-}
-
-// --- INIT ---
-updateSaldi();
-populateWalletFilter();
+// --- DARK MODE ---
+document.getElementById('darkModeToggle').addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
